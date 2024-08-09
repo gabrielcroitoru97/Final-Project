@@ -1,0 +1,386 @@
+<div>
+  <div>
+    <h1>
+      Work location #<%= @the_work_location.id %> details
+    </h1>
+
+    <div>
+      <div>
+        <a href="/work_locations">
+          Go back
+        </a>
+      </div>
+
+      <div>
+        <a href="/delete_work_location/<%= @the_work_location.id %>">
+          Delete work location
+        </a>
+      </div>
+    </div>
+
+    <dl>
+      <dt>
+        Location type
+      </dt>
+      <dd>
+        <%= @the_work_location.location_type_id %>
+      </dd>
+
+      <dt>
+        Wifi speed
+      </dt>
+      <dd>
+        <%= @the_work_location.wifi_speed %>
+      </dd>
+
+      <dt>
+        Address
+      </dt>
+      <dd>
+        <%= @the_work_location.address %>
+      </dd>
+
+      <dt>
+        Weekday opening
+      </dt>
+      <dd>
+        <%= @the_work_location.weekday_opening %>
+      </dd>
+
+      <dt>
+        Weekend opening
+      </dt>
+      <dd>
+        <%= @the_work_location.weekend_opening %>
+      </dd>
+
+      <dt>
+        Weekday closing
+      </dt>
+      <dd>
+        <%= @the_work_location.weekday_closing %>
+      </dd>
+
+      <dt>
+        Weekend closing
+      </dt>
+      <dd>
+        <%= @the_work_location.weekend_closing %>
+      </dd>
+
+      <dt>
+        Phone number
+      </dt>
+      <dd>
+        <%= @the_work_location.phone_number %>
+      </dd>
+
+      <dt>
+        Website
+      </dt>
+      <dd>
+        <%= @the_work_location.website %>
+      </dd>
+
+      <dt>
+        City
+      </dt>
+      <dd>
+        <%= @the_work_location.city %>
+      </dd>
+
+      <dt>
+        State
+      </dt>
+      <dd>
+        <%= @the_work_location.state %>
+      </dd>
+
+      <dt>
+        Zip code
+      </dt>
+      <dd>
+        <%= @the_work_location.zip_code %>
+      </dd>
+
+      <dt>
+        Longitude
+      </dt>
+      <dd>
+        <%= @the_work_location.longitude %>
+      </dd>
+
+      <dt>
+        Latitude
+      </dt>
+      <dd>
+        <%= @the_work_location.latitude %>
+      </dd>
+
+      <dt>
+        Description
+      </dt>
+      <dd>
+        <%= @the_work_location.description %>
+      </dd>
+
+      <dt>
+        Name
+      </dt>
+      <dd>
+        <%= @the_work_location.name %>
+      </dd>
+
+      <dt>
+        Average rating
+      </dt>
+      <dd>
+        <%= @the_work_location.average_rating %>
+      </dd>
+
+      <dt>
+        Owner
+      </dt>
+      <dd>
+        <%= @the_work_location.owner_id %>
+      </dd>
+
+      <dt>
+        Crowding average
+      </dt>
+      <dd>
+        <%= @the_work_location.crowding_average %>
+      </dd>
+
+      <dt>
+        Noise average
+      </dt>
+      <dd>
+        <%= @the_work_location.noise_average %>
+      </dd>
+
+      <dt>
+        Requires purchase
+      </dt>
+      <dd>
+        <%= @the_work_location.requires_purchase %>
+      </dd>
+
+      <dt>
+        Membership
+      </dt>
+      <dd>
+        <%= @the_work_location.membership %>
+      </dd>
+
+      <dt>
+        Created at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_work_location.created_at) %> ago
+      </dd>
+
+      <dt>
+        Updated at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_work_location.updated_at) %> ago
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<hr>
+
+
+<div>
+  <div>
+    <h2>
+      Edit work location
+    </h2>
+
+    <form action="/modify_work_location/<%= @the_work_location.id %>"  method="post" >
+      <div>
+        <label for="location_type_id_box">
+          Location type
+        </label>
+
+        <input type="text" id="location_type_id_box" name="query_location_type_id" value="<%= @the_work_location.location_type_id %>">
+      </div>
+
+      <div>
+        <label for="wifi_speed_box">
+          Wifi speed
+        </label>
+
+        <input type="text" id="wifi_speed_box" name="query_wifi_speed" value="<%= @the_work_location.wifi_speed %>">
+      </div>
+
+      <div>
+        <label for="address_box">
+          Address
+        </label>
+
+        <input type="text" id="address_box" name="query_address" value="<%= @the_work_location.address %>">
+      </div>
+
+      <div>
+        <label for="weekday_opening_box">
+          Weekday opening
+        </label>
+
+        <input type="time" id="weekday_opening_box" name="query_weekday_opening" value="<%= @the_work_location.weekday_opening %>">
+      </div>
+
+      <div>
+        <label for="weekend_opening_box">
+          Weekend opening
+        </label>
+
+        <input type="time" id="weekend_opening_box" name="query_weekend_opening" value="<%= @the_work_location.weekend_opening %>">
+      </div>
+
+      <div>
+        <label for="weekday_closing_box">
+          Weekday closing
+        </label>
+
+        <input type="time" id="weekday_closing_box" name="query_weekday_closing" value="<%= @the_work_location.weekday_closing %>">
+      </div>
+
+      <div>
+        <label for="weekend_closing_box">
+          Weekend closing
+        </label>
+
+        <input type="time" id="weekend_closing_box" name="query_weekend_closing" value="<%= @the_work_location.weekend_closing %>">
+      </div>
+
+      <div>
+        <label for="phone_number_box">
+          Phone number
+        </label>
+
+        <input type="text" id="phone_number_box" name="query_phone_number" value="<%= @the_work_location.phone_number %>">
+      </div>
+
+      <div>
+        <label for="website_box">
+          Website
+        </label>
+
+        <input type="text" id="website_box" name="query_website" value="<%= @the_work_location.website %>">
+      </div>
+
+      <div>
+        <label for="city_box">
+          City
+        </label>
+
+        <input type="text" id="city_box" name="query_city" value="<%= @the_work_location.city %>">
+      </div>
+
+      <div>
+        <label for="state_box">
+          State
+        </label>
+
+        <input type="text" id="state_box" name="query_state" value="<%= @the_work_location.state %>">
+      </div>
+
+      <div>
+        <label for="zip_code_box">
+          Zip code
+        </label>
+
+        <input type="text" id="zip_code_box" name="query_zip_code" value="<%= @the_work_location.zip_code %>">
+      </div>
+
+      <div>
+        <label for="longitude_box">
+          Longitude
+        </label>
+
+        <input type="text" id="longitude_box" name="query_longitude" value="<%= @the_work_location.longitude %>">
+      </div>
+
+      <div>
+        <label for="latitude_box">
+          Latitude
+        </label>
+
+        <input type="text" id="latitude_box" name="query_latitude" value="<%= @the_work_location.latitude %>">
+      </div>
+
+      <div>
+        <label for="description_box">
+          Description
+        </label>
+
+        <textarea id="description_box" name="query_description"><%= @the_work_location.description %></textarea>
+      </div>
+
+      <div>
+        <label for="name_box">
+          Name
+        </label>
+
+        <input type="text" id="name_box" name="query_name" value="<%= @the_work_location.name %>">
+      </div>
+
+      <div>
+        <label for="average_rating_box">
+          Average rating
+        </label>
+
+        <input type="text" id="average_rating_box" name="query_average_rating" value="<%= @the_work_location.average_rating %>">
+      </div>
+
+      <div>
+        <label for="owner_id_box">
+          Owner
+        </label>
+
+        <input type="text" id="owner_id_box" name="query_owner_id" value="<%= @the_work_location.owner_id %>">
+      </div>
+
+      <div>
+        <label for="crowding_average_box">
+          Crowding average
+        </label>
+
+        <input type="text" id="crowding_average_box" name="query_crowding_average" value="<%= @the_work_location.crowding_average %>">
+      </div>
+
+      <div>
+        <label for="noise_average_box">
+          Noise average
+        </label>
+
+        <input type="text" id="noise_average_box" name="query_noise_average" value="<%= @the_work_location.noise_average %>">
+      </div>
+
+      <div>
+        <input type="checkbox" id="requires_purchase_box" name="query_requires_purchase" value="1" <%= "checked" if @the_work_location.requires_purchase %>>
+
+        <label for="requires_purchase_box">
+            Requires purchase
+        </label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="membership_box" name="query_membership" value="1" <%= "checked" if @the_work_location.membership %>>
+
+        <label for="membership_box">
+            Membership
+        </label>
+      </div>
+
+      <button>
+        Update work location
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>

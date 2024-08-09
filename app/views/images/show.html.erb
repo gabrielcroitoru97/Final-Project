@@ -1,0 +1,101 @@
+<div>
+  <div>
+    <h1>
+      Image #<%= @the_image.id %> details
+    </h1>
+
+    <div>
+      <div>
+        <a href="/images">
+          Go back
+        </a>
+      </div>
+
+      <div>
+        <a href="/delete_image/<%= @the_image.id %>">
+          Delete image
+        </a>
+      </div>
+    </div>
+
+    <dl>
+      <dt>
+        Location
+      </dt>
+      <dd>
+        <%= @the_image.location_id %>
+      </dd>
+
+      <dt>
+        Poster
+      </dt>
+      <dd>
+        <%= @the_image.poster_id %>
+      </dd>
+
+      <dt>
+        Picture
+      </dt>
+      <dd>
+        <%= @the_image.picture %>
+      </dd>
+
+      <dt>
+        Created at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_image.created_at) %> ago
+      </dd>
+
+      <dt>
+        Updated at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_image.updated_at) %> ago
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<hr>
+
+
+<div>
+  <div>
+    <h2>
+      Edit image
+    </h2>
+
+    <form action="/modify_image/<%= @the_image.id %>"  method="post" >
+      <div>
+        <label for="location_id_box">
+          Location
+        </label>
+
+        <input type="text" id="location_id_box" name="query_location_id" value="<%= @the_image.location_id %>">
+      </div>
+
+      <div>
+        <label for="poster_id_box">
+          Poster
+        </label>
+
+        <input type="text" id="poster_id_box" name="query_poster_id" value="<%= @the_image.poster_id %>">
+      </div>
+
+      <div>
+        <label for="picture_box">
+          Picture
+        </label>
+
+        <input type="text" id="picture_box" name="query_picture" value="<%= @the_image.picture %>">
+      </div>
+
+      <button>
+        Update image
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>

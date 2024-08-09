@@ -10,5 +10,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 0) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_09_004452) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.string "username"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "work_locations", force: :cascade do |t|
+    t.integer "location_type_id"
+    t.integer "wifi_speed"
+    t.string "address"
+    t.time "weekday_opening"
+    t.time "weekend_opening"
+    t.time "weekday_closing"
+    t.time "weekend_closing"
+    t.string "phone_number"
+    t.string "website"
+    t.string "city"
+    t.string "state"
+    t.string "zip_code"
+    t.string "longitude"
+    t.string "latitude"
+    t.text "description"
+    t.string "name"
+    t.float "average_rating"
+    t.integer "owner_id"
+    t.integer "crowding_average"
+    t.integer "noise_average"
+    t.boolean "requires_purchase"
+    t.boolean "membership"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
 end
