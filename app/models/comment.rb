@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: comments
+#
+#  id           :bigint           not null, primary key
+#  content      :text
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  commenter_id :integer
+#  location_id  :integer
+#
 class Comment < ApplicationRecord
 
   belongs_to :location, required: true, class_name: "WorkLocation", foreign_key: "location_id"

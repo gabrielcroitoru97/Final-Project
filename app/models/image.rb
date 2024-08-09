@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: images
+#
+#  id          :bigint           not null, primary key
+#  picture     :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  location_id :integer
+#  poster_id   :integer
+#
 class Image < ApplicationRecord
 
   belongs_to :location, required: true, class_name: "WorkLocation", foreign_key: "location_id"

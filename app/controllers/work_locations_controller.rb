@@ -7,6 +7,7 @@ class WorkLocationsController < ApplicationController
     render({ :template => "work_locations/index" })
   end
 
+
   def show
     the_id = params.fetch("path_id")
 
@@ -16,6 +17,13 @@ class WorkLocationsController < ApplicationController
 
     render({ :template => "work_locations/show" })
   end
+
+  def new_page
+    render({ :template => "work_locations/new_page" })
+
+  end
+
+
 
   def create
     the_work_location = WorkLocation.new
