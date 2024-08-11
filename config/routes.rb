@@ -7,13 +7,7 @@ Rails.application.routes.draw do
 
   # CREATE
   post("/insert_location_type", { :controller => "location_types", :action => "create" })
-  # READ
-  get("/location_types", { :controller => "location_types", :action => "index" })
-  get("/location_types/:path_id", { :controller => "location_types", :action => "show" })
-  # UPDATE
-  post("/modify_location_type/:path_id", { :controller => "location_types", :action => "update" })
-  # DELETE
-  get("/delete_location_type/:path_id", { :controller => "location_types", :action => "destroy" })
+ 
   #------------------------------
   # Routes for the Favorite place resource:
   # CREATE
@@ -29,20 +23,15 @@ Rails.application.routes.draw do
   # Routes for the Image resource:
   # CREATE
   post("/insert_image", { :controller => "images", :action => "create" })
-  # READ
-  get("/images", { :controller => "images", :action => "index" })
+
   get("/images/:path_id", { :controller => "images", :action => "show" })
-  # UPDATE
-  post("/modify_image/:path_id", { :controller => "images", :action => "update" })
+
   # DELETE
   get("/delete_image/:path_id", { :controller => "images", :action => "destroy" })
   #------------------------------
   # Routes for the Comment resource:
   # CREATE
   post("/insert_comment", { :controller => "comments", :action => "create" })
-  # READ
-  get("/comments", { :controller => "comments", :action => "index" })
-  get("/comments/:path_id", { :controller => "comments", :action => "show" })
   # UPDATE
   post("/modify_comment/:path_id", { :controller => "comments", :action => "update" })
   # DELETE
@@ -52,7 +41,6 @@ Rails.application.routes.draw do
   # CREATE
   post("/insert_rating", { :controller => "ratings", :action => "create" })
   # READ
-  get("/ratings", { :controller => "ratings", :action => "index" })
   get("/ratings/:path_id", { :controller => "ratings", :action => "show" })
   # UPDATE
   post("/modify_rating/:path_id", { :controller => "ratings", :action => "update" })

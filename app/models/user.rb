@@ -32,7 +32,7 @@ class User < ApplicationRecord
   has_many  :favorite_places, class_name: "FavoritePlace", foreign_key: "user_id", dependent: :destroy
 
   has_many :preferred_places, through: :work_locations, source: :favorite_places
-  validates :username, presence: true
+  #validates :username, presence: true
 
   
   

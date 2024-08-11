@@ -6,6 +6,7 @@
   </div>
 </div>
 
+<a href="/new/work_location"> Add a new place!<a>
 <hr>
 
 
@@ -23,62 +24,6 @@
         </th>
 
         <th>
-          Wifi speed
-        </th>
-
-        <th>
-          Address
-        </th>
-
-        <th>
-          Weekday opening
-        </th>
-
-        <th>
-          Weekend opening
-        </th>
-
-        <th>
-          Weekday closing
-        </th>
-
-        <th>
-          Weekend closing
-        </th>
-
-        <th>
-          Phone number
-        </th>
-
-        <th>
-          Website
-        </th>
-
-        <th>
-          City
-        </th>
-
-        <th>
-          State
-        </th>
-
-        <th>
-          Zip code
-        </th>
-
-        <th>
-          Longitude
-        </th>
-
-        <th>
-          Latitude
-        </th>
-
-        <th>
-          Description
-        </th>
-
-        <th>
           Name
         </th>
 
@@ -87,145 +32,35 @@
         </th>
 
         <th>
-          Owner
-        </th>
-
-        <th>
-          Crowding average
-        </th>
-
-        <th>
-          Noise average
-        </th>
-
-        <th>
-          Requires purchase
-        </th>
-
-        <th>
-          Membership
-        </th>
-
-        <th>
-          Created at
-        </th>
-
-        <th>
-          Updated at
-        </th>
-
-        <th>
         </th>
       </tr>
+        <%if @list_of_work_locations.present?%>
+          <% @list_of_work_locations.each do |a_work_location| %>
+          <tr>
+            <td>
+              <%= a_work_location.id %>
+            </td>
 
-      <% @list_of_work_locations.each do |a_work_location| %>
-      <tr>
-        <td>
-          <%= a_work_location.id %>
-        </td>
+            <td>
+              <%= a_work_location.location_type_id %>
+            </td>
 
-        <td>
-          <%= a_work_location.location_type_id %>
-        </td>
+            <td>
+              <%= a_work_location.name %>
+            </td>
 
-        <td>
-          <%= a_work_location.wifi_speed %>
-        </td>
+            <td>
+              <%= a_work_location.average_rating %>
+            </td>
 
-        <td>
-          <%= a_work_location.address %>
-        </td>
-
-        <td>
-          <%= a_work_location.weekday_opening %>
-        </td>
-
-        <td>
-          <%= a_work_location.weekend_opening %>
-        </td>
-
-        <td>
-          <%= a_work_location.weekday_closing %>
-        </td>
-
-        <td>
-          <%= a_work_location.weekend_closing %>
-        </td>
-
-        <td>
-          <%= a_work_location.phone_number %>
-        </td>
-
-        <td>
-          <%= a_work_location.website %>
-        </td>
-
-        <td>
-          <%= a_work_location.city %>
-        </td>
-
-        <td>
-          <%= a_work_location.state %>
-        </td>
-
-        <td>
-          <%= a_work_location.zip_code %>
-        </td>
-
-        <td>
-          <%= a_work_location.longitude %>
-        </td>
-
-        <td>
-          <%= a_work_location.latitude %>
-        </td>
-
-        <td>
-          <%= a_work_location.description %>
-        </td>
-
-        <td>
-          <%= a_work_location.name %>
-        </td>
-
-        <td>
-          <%= a_work_location.average_rating %>
-        </td>
-
-        <td>
-          <%= a_work_location.owner_id %>
-        </td>
-
-        <td>
-          <%= a_work_location.crowding_average %>
-        </td>
-
-        <td>
-          <%= a_work_location.noise_average %>
-        </td>
-
-        <td>
-          <%= a_work_location.requires_purchase %>
-        </td>
-
-        <td>
-          <%= a_work_location.membership %>
-        </td>
-
-        <td>
-          <%= time_ago_in_words(a_work_location.created_at) %> ago
-        </td>
-        <td>
-          <%= time_ago_in_words(a_work_location.updated_at) %> ago
-        </td>
-
-        <td>
-          <a href="/work_locations/<%= a_work_location.id %>">
-            Show details
-          </a>
-        </td>
-      </tr>
-      <% end %>
+            <td>
+              <a href="/work_locations/<%= a_work_location.id %>">
+                Show details
+              </a>
+            </td>
+          </tr>
+          <% end %>
+        <%end%>
     </table>
   </div>
 </div>

@@ -11,6 +11,16 @@
   </head>
 
   <body>
+      <h1>Dino Desks</h1>
+      <%if current_user == nil%>
+        <a href="/users/sign_in">Sign in</a>
+        <a href="/users/sign_up">Sign_up</a>
+        
+      <%else%>
+        <a href="/users/edit_profile">Edit profile</a>
+        <a href="/users/sign_out">Sign out</a>
+
+      <%end%>
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
     <%= yield %>
