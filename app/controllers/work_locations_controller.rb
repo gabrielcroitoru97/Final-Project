@@ -14,6 +14,7 @@ class WorkLocationsController < ApplicationController
     matching_work_locations = WorkLocation.where({ :id => the_id })
 
     @the_work_location = matching_work_locations.at(0)
+    @ratings=Rating.where({:location_id=>the_id})
 
     render({ :template => "work_locations/show" })
   end
@@ -64,12 +65,18 @@ class WorkLocationsController < ApplicationController
     end
   end
 
+  def edit
+    the_id = params.fetch("path_id")
+    @the_work_location=WorkLocation.where({:id=>the_id}).at(0)
+    @loc_types = LocationType.all
+    render({ :template => "work_locations/edit" })
+  end
+
   def update
     the_id = params.fetch("path_id")
     the_work_location = WorkLocation.where({ :id => the_id }).at(0)
 
     the_work_location.location_type_id = params.fetch("query_location_type_id")
-    the_work_location.wifi_speed = params.fetch("query_wifi_speed")
     the_work_location.address = params.fetch("query_address")
     the_work_location.weekday_opening = params.fetch("query_weekday_opening")
     the_work_location.weekend_opening = params.fetch("query_weekend_opening")
@@ -80,14 +87,8 @@ class WorkLocationsController < ApplicationController
     the_work_location.city = params.fetch("query_city")
     the_work_location.state = params.fetch("query_state")
     the_work_location.zip_code = params.fetch("query_zip_code")
-    the_work_location.longitude = params.fetch("query_longitude")
-    the_work_location.latitude = params.fetch("query_latitude")
     the_work_location.description = params.fetch("query_description")
     the_work_location.name = params.fetch("query_name")
-    the_work_location.average_rating = params.fetch("query_average_rating")
-    the_work_location.owner_id = User.where({:email=>params.fetch("query_owner")}).at(0).id
-    the_work_location.crowding_average = params.fetch("query_crowding_average")
-    the_work_location.noise_average = params.fetch("query_noise_average")
     the_work_location.requires_purchase = params.fetch("query_requires_purchase", false)
     the_work_location.membership = params.fetch("query_membership", false)
 

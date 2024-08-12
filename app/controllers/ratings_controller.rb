@@ -17,6 +17,11 @@ class RatingsController < ApplicationController
     render({ :template => "ratings/show" })
   end
 
+  def add
+    @location_id = params.fetch("path_id")
+    render({ :template => "ratings/new" })
+  end
+
   def create
     the_rating = Rating.new
     the_rating.user_id = params.fetch("query_user_id")
@@ -29,9 +34,9 @@ class RatingsController < ApplicationController
 
     if the_rating.valid?
       the_rating.save
-      redirect_to("/ratings", { :notice => "Rating created successfully." })
+      redirect_to("/work_locations/#{the_rating.location_id}", { :notice => "Rating created successfully." })
     else
-      redirect_to("/ratings", { :alert => the_rating.errors.full_messages.to_sentence })
+      redirect_to("/work_locations/#{the_rating.location_id}", { :alert => the_rating.errors.full_messages.to_sentence })
     end
   end
 

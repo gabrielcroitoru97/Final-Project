@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   # Routes for the Rating resource:
   # CREATE
   post("/insert_rating", { :controller => "ratings", :action => "create" })
+  get("/add_rating/:path_id", { :controller => "ratings", :action => "add" })
   # READ
   get("/ratings/:path_id", { :controller => "ratings", :action => "show" })
   # UPDATE
@@ -52,6 +53,7 @@ Rails.application.routes.draw do
   # CREATE
   post("/insert_work_location", { :controller => "work_locations", :action => "create" })
   get("/new/work_location",{:controller => "work_locations", :action=>"new_page"})
+  get("/edit_work_location/:path_id", { :controller => "work_locations", :action => "edit" })
   # READ
   get("/work_locations", { :controller => "work_locations", :action => "index" })
   get("/work_locations/:path_id", { :controller => "work_locations", :action => "show" })

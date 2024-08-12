@@ -1,0 +1,68 @@
+
+
+<div>
+  <div>
+    <h2>
+      Add rating
+    </h2>
+
+    <form action="/insert_rating/"  method="post" >
+      <div>
+
+        <input type="hidden" id="user_id_box" name="query_user_id" value="<%=current_user.id %>">
+      </div>
+
+      <div>
+
+
+        <input type="hidden" id="location_id_box" name="query_location_id" value="<%= @location_id %>">
+      </div>
+
+      <div>
+        <label for="stars_box">
+          Stars
+        </label>
+
+        <input type="text" id="stars_box" name="query_stars">
+      </div>
+
+      <div>
+        <label for="wifi_rating_box">
+          Wifi rating
+        </label>
+
+        <input type="text" id="wifi_rating_box" name="query_wifi_rating">
+      </div>
+
+      <div>
+        <label for="crowding_score_box">
+          Crowding score
+        </label>
+
+        <input type="text" id="crowding_score_box" name="query_crowding_score">
+      </div>
+
+      <div>
+        <label for="noise_level_box">
+          Noise level
+        </label>
+
+        <input type="text" id="noise_level_box" name="query_noise_level">
+      </div>
+
+            <div>
+        <label for="content_box">
+          Content
+        </label>
+
+        <textarea id="content_box" name="query_content"></textarea>
+      </div>
+
+      <button>
+        Create rating
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>

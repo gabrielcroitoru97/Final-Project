@@ -1,0 +1,136 @@
+
+<div>
+  <div>
+    <h2>
+      Edit work location
+    </h2>
+
+    <form action="/modify_work_location/<%= @the_work_location.id %>"  method="post" >
+       </div>
+            <label for="location_type_box">
+          Location type
+        </label>
+        <select name="query_location_type_id" id="location_type_box">
+           <% @loc_types.each do |item| %>
+             <option value= "<%=item.id %>"><%= item.descriptor %></option>
+           <% end %>
+        </select>
+      </div>
+      <div>
+        <label for="name_box">
+          Name
+        </label>
+
+        <input type="text" id="name_box" name="query_name" value="<%= @the_work_location.name %>">
+      </div>
+      <div>
+        <label for="description_box">
+          Description
+        </label>
+
+        <textarea id="description_box" name="query_description"><%= @the_work_location.description %></textarea>
+      </div>
+
+
+      <div>
+        <label for="address_box">
+          Address
+        </label>
+
+        <input type="text" id="address_box" name="query_address" value="<%= @the_work_location.address %>">
+      </div>
+
+            <div>
+        <label for="city_box">
+          City
+        </label>
+
+        <input type="text" id="city_box" name="query_city" value="<%= @the_work_location.city %>">
+      </div>
+
+      <div>
+        <label for="state_box">
+          State
+        </label>
+
+        <input type="text" id="state_box" name="query_state" value="<%= @the_work_location.state %>">
+      </div>
+      <div>
+        <label for="zip_code_box">
+          Zip code
+        </label>
+
+        <input type="text" id="zip_code_box" name="query_zip_code" value="<%= @the_work_location.zip_code %>">
+      </div>
+
+
+      <div>
+        <label for="weekday_opening_box">
+          Weekday opening
+        </label>
+
+        <input type="time" id="weekday_opening_box" name="query_weekday_opening" value="<%= @the_work_location.weekday_opening %>">
+      </div>
+
+      <div>
+        <label for="weekend_opening_box">
+          Weekend opening
+        </label>
+
+        <input type="time" id="weekend_opening_box" name="query_weekend_opening" value="<%= @the_work_location.weekend_opening %>">
+      </div>
+
+      <div>
+        <label for="weekday_closing_box">
+          Weekday closing
+        </label>
+
+        <input type="time" id="weekday_closing_box" name="query_weekday_closing" value="<%= @the_work_location.weekday_closing %>">
+      </div>
+
+      <div>
+        <label for="weekend_closing_box">
+          Weekend closing
+        </label>
+
+        <input type="time" id="weekend_closing_box" name="query_weekend_closing" value="<%= @the_work_location.weekend_closing %>">
+      </div>
+
+      <div>
+        <label for="phone_number_box">
+          Phone number
+        </label>
+
+        <input type="text" id="phone_number_box" name="query_phone_number" value="<%= @the_work_location.phone_number %>">
+      </div>
+
+      <div>
+        <label for="website_box">
+          Website
+        </label>
+
+        <input type="text" id="website_box" name="query_website" value="<%= @the_work_location.website %>">
+      </div>
+
+      <div>
+        <input type="checkbox" id="requires_purchase_box" name="query_requires_purchase" value="1" <%= "checked" if @the_work_location.requires_purchase %>>
+
+        <label for="requires_purchase_box">
+            Requires purchase
+        </label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="membership_box" name="query_membership" value="1" <%= "checked" if @the_work_location.membership %>>
+
+        <label for="membership_box">
+            Membership
+        </label>
+      </div>
+
+      <button>
+        Update work location
+      </button>
+    </form>
+  </div>
+</div>
