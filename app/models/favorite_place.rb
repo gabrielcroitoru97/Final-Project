@@ -15,4 +15,12 @@ class FavoritePlace < ApplicationRecord
   belongs_to :user, required: true, class_name: "User", foreign_key: "user_id"
   has_one  :owner, through: :place, source: :owner
 
+  def user
+    return User.where({:id=>self.user_id}).at(0)
+  end
+
+  def place
+    return WorkLocation.where({:id=>self.place_id}).at(0)
+  end
+
 end

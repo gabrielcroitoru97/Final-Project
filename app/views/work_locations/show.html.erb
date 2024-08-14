@@ -26,6 +26,16 @@
         Edit Work Location
       </a>
     </div>
+   
+    <%if FavoritePlace.where({:place_id=>@the_work_location.id}).where({:user_id=>current_user.id}).at(0)==nil%>
+      <div>
+        <form action="/insert_favorite_place/<%= @the_work_location.id %>" method="post">
+        <button>Add Favorite</button>
+        <input type="text" name = "query_note" placeholder="Add Note">
+      </div>
+    <%else%>
+      Already a Favorite
+    <%end%>
 
   <table border ="1">
     <tr>

@@ -46,4 +46,8 @@ class WorkLocation < ApplicationRecord
   validates :city, presence: true
   validates :address, presence: true
 
+  def type
+    return LocationType.where({:id=>self.location_type_id}).at(0).descriptor
+  end
+
 end

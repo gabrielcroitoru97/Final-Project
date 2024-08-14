@@ -1,4 +1,11 @@
+<h2> User: <%=current_user.email%></h2>
+
 <div>
+  <div>
+    <h2>
+      <a href="/users/edit">Edit profile</a>
+    </h2>
+  <div>
   <div>
     <h1>
       List of all favorite places
@@ -14,13 +21,6 @@
   <div>
     <table border="1">
       <tr>
-        <th>
-          ID
-        </th>
-
-        <th>
-          User
-        </th>
 
         <th>
           Place
@@ -31,11 +31,11 @@
         </th>
 
         <th>
-          Created at
+          Added On
         </th>
 
         <th>
-          Updated at
+          Updated On
         </th>
 
         <th>
@@ -44,16 +44,9 @@
 
       <% @list_of_favorite_places.each do |a_favorite_place| %>
       <tr>
-        <td>
-          <%= a_favorite_place.id %>
-        </td>
 
         <td>
-          <%= a_favorite_place.user_id %>
-        </td>
-
-        <td>
-          <%= a_favorite_place.place_id %>
+          <%= a_favorite_place.place.name %>
         </td>
 
         <td>
@@ -68,7 +61,7 @@
         </td>
 
         <td>
-          <a href="/favorite_places/<%= a_favorite_place.id %>">
+          <a href="/work_locations/<%=a_favorite_place.place.id %>">
             Show details
           </a>
         </td>
@@ -79,3 +72,5 @@
 </div>
 
 <hr>
+  </div>
+</div>

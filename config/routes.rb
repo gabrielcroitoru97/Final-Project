@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
   
 
-  root to: "homepage#visit"
+  root to: "work_locations#index"
   
+  get("/profile", {:controller => "homepage", :action => "profile"})
+
   # Routes for the Location type resource:
 
   # CREATE
@@ -11,7 +13,7 @@ Rails.application.routes.draw do
   #------------------------------
   # Routes for the Favorite place resource:
   # CREATE
-  post("/insert_favorite_place", { :controller => "favorite_places", :action => "create" })
+  post("/insert_favorite_place/:path_id", { :controller => "favorite_places", :action => "create" })
   # READ
   get("/favorite_places", { :controller => "favorite_places", :action => "index" })
   get("/favorite_places/:path_id", { :controller => "favorite_places", :action => "show" })

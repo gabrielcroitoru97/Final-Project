@@ -1,6 +1,6 @@
 class FavoritePlacesController < ApplicationController
   def index
-    matching_favorite_places = FavoritePlace.all
+    matching_favorite_places = FavoritePlace.where({:user_id=>current_user.id})
 
     @list_of_favorite_places = matching_favorite_places.order({ :created_at => :desc })
 
@@ -19,8 +19,8 @@ class FavoritePlacesController < ApplicationController
 
   def create
     the_favorite_place = FavoritePlace.new
-    the_favorite_place.user_id = params.fetch("query_user_id")
-    the_favorite_place.place_id = params.fetch("query_place_id")
+    the_favorite_place.user_id = current_user.id
+    the_favorite_place.place_id = params.fetch("path_id")
     the_favorite_place.note = params.fetch("query_note")
 
     if the_favorite_place.valid?
