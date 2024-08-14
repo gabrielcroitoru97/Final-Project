@@ -8,33 +8,32 @@
     </h1>
 
     <div>
-      <div>
-        <a href="/work_locations">
-          Go back
-        </a>
+
+    <% if current_user!=nil%> 
+      <%if @the_work_location.owner_id==current_user.id%>
+        <div>
+          <a href="/delete_work_location/<%= @the_work_location.id %>">
+            Delete work location
+          </a>
+        </div>
       </div>
 
       <div>
-        <a href="/delete_work_location/<%= @the_work_location.id %>">
-          Delete work location
+        <a href="/edit_work_location/<%= @the_work_location.id %>">
+          Edit Work Location
         </a>
       </div>
-    </div>
-
-    <div>
-      <a href="/edit_work_location/<%= @the_work_location.id %>">
-        Edit Work Location
-      </a>
-    </div>
-   
-    <%if FavoritePlace.where({:place_id=>@the_work_location.id}).where({:user_id=>current_user.id}).at(0)==nil%>
-      <div>
-        <form action="/insert_favorite_place/<%= @the_work_location.id %>" method="post">
-        <button>Add Favorite</button>
-        <input type="text" name = "query_note" placeholder="Add Note">
-      </div>
-    <%else%>
-      Already a Favorite
+      <%end%>
+    
+      <%if FavoritePlace.where({:place_id=>@the_work_location.id}).where({:user_id=>current_user.id}).at(0)==nil%>
+        <div>
+          <form action="/insert_favorite_place/<%= @the_work_location.id %>" method="post">
+          <button>Add Favorite</button>
+          <input type="text" name = "query_note" placeholder="Add Note">
+        </div>
+      <%else%>
+        Already a Favorite <a href="/delete_favorite_place/<%=@the_work_location.id%>">Remove Favorite</a>
+      <%end%>
     <%end%>
 
   <table border ="1">
@@ -52,7 +51,7 @@
     </tr>
     <tr>
       <td>Address</td>
-      <td><%= @the_work_location.wifi_speed %></td>
+      <td><%= @the_work_location.address %></td>
     </tr>
 
     <tr>
@@ -97,7 +96,10 @@
   </table>
 </div>
 <h2>Ratings</h2>
-<a href="/add_rating/<%= @the_work_location.id %>">Rate This Location</a>
+
+<% if current_user!=nil and Rating.where({:location_id=>@the_work_location.id}).where({:user_id=>current_user.id}).at(0)==nil%> 
+  <a href="/add_rating/<%= @the_work_location.id %>">Rate This Location</a>
+<%end%>
 <div>
 <table border = "1">
   <tr>
@@ -118,6 +120,7 @@
 <div>
 <table border = "1">
   <tr>
+    <th>User</th>
     <th>Overall</th>
     <th>Wifi</th>
     <th>Crowding</th>
@@ -129,6 +132,7 @@
     <% @ratings.each do |a_rating| %>
   
       <tr>
+        <td><%= a_rating.user.email%></td>
         <td><%= a_rating.stars %></td>
         <td><%= a_rating.wifi_rating %></td>
         <td><%= a_rating.noise_level %></td>

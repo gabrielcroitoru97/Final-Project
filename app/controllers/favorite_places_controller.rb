@@ -25,9 +25,9 @@ class FavoritePlacesController < ApplicationController
 
     if the_favorite_place.valid?
       the_favorite_place.save
-      redirect_to("/favorite_places", { :notice => "Favorite place created successfully." })
+      redirect_to("/work_locations/#{the_favorite_place.place_id}", { :notice => "Favorite place created successfully." })
     else
-      redirect_to("/favorite_places", { :alert => the_favorite_place.errors.full_messages.to_sentence })
+      redirect_to("/work_locations/#{the_favorite_place.place_id}", { :alert => the_favorite_place.errors.full_messages.to_sentence })
     end
   end
 
@@ -48,11 +48,12 @@ class FavoritePlacesController < ApplicationController
   end
 
   def destroy
-    the_id = params.fetch("path_id")
-    the_favorite_place = FavoritePlace.where({ :id => the_id }).at(0)
+    the_place_id = params.fetch("path_id")
+    
+    the_favorite_place = FavoritePlace.where({ :place_id => the_place_id }).where({:user_id=>current_user.id}).at(0)
 
     the_favorite_place.destroy
 
-    redirect_to("/favorite_places", { :notice => "Favorite place deleted successfully."} )
+    redirect_to("/work_locations/#{the_place_id}", { :notice => "Removed Favorite Place"} )
   end
 end

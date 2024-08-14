@@ -6,7 +6,9 @@
   </div>
 </div>
 
+<%if current_user != nil%>
 <a href="/new/work_location"> Add a new place!<a>
+<%end%>
 <hr>
 
 
@@ -15,9 +17,6 @@
   <div>
     <table border="1">
       <tr>
-        <th>
-          ID
-        </th>
 
         <th>
           Location type
@@ -37,9 +36,6 @@
         <%if @list_of_work_locations.present?%>
           <% @list_of_work_locations.each do |a_work_location| %>
           <tr>
-            <td>
-              <%= a_work_location.id %>
-            </td>
 
             <td>
               <%= a_work_location.type%>
