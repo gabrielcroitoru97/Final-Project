@@ -3,38 +3,34 @@
 
 <div>
   <div>
-    <h1>
-      Work location <%= @the_work_location.name %> details
-    </h1>
+    <h2>
+      <%= @the_work_location.name %> details
+    </h2>
 
     <div>
 
-    <% if current_user!=nil%> 
-      <%if @the_work_location.owner_id==current_user.id%>
-        <div>
-          <a href="/delete_work_location/<%= @the_work_location.id %>">
-            Delete work location
-          </a>
-        </div>
-      </div>
-
+  <%if Image.where({:location_id=>@the_work_location.id}).at(0) != nil%>
+    <div>
       <div>
-        <a href="/edit_work_location/<%= @the_work_location.id %>">
-          Edit Work Location
-        </a>
+        <img src="<%=Image.where({:location_id=>@the_work_location.id}).sample.picture%>"
+          width="400"
+          >
       </div>
-      <%end%>
+      <div>
+       <a href="/images/<%=@the_work_location.id%>">View all images </a>
+      </div>
+      
+    </div>
+  <%end%>
+
+  <% if current_user!=nil%> 
+    <form action="/insert_image/<%= @the_work_location.id %>" method="post">
+    <button>Add image</button>
+    <input type="text" name = "query_image_url" placeholder="Input URL">
     
-      <%if FavoritePlace.where({:place_id=>@the_work_location.id}).where({:user_id=>current_user.id}).at(0)==nil%>
-        <div>
-          <form action="/insert_favorite_place/<%= @the_work_location.id %>" method="post">
-          <button>Add Favorite</button>
-          <input type="text" name = "query_note" placeholder="Add Note">
-        </div>
-      <%else%>
-        Already a Favorite <a href="/delete_favorite_place/<%=@the_work_location.id%>">Remove Favorite</a>
-      <%end%>
-    <%end%>
+    </form>
+    
+  <%end%>
 
   <table border ="1">
     <tr>
@@ -95,6 +91,37 @@
     </tr>
   </table>
 </div>
+
+
+    <% if current_user!=nil%> 
+      <%if @the_work_location.owner_id==current_user.id%>
+        <div>
+          <a href="/delete_work_location/<%= @the_work_location.id %>">
+            Delete work location
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <a href="/edit_work_location/<%= @the_work_location.id %>">
+          Edit Work Location
+        </a>
+      </div>
+      <%end%>
+    
+      <%if FavoritePlace.where({:place_id=>@the_work_location.id}).where({:user_id=>current_user.id}).at(0)==nil%>
+        <div>
+          <form action="/insert_favorite_place/<%= @the_work_location.id %>" method="post">
+          <button>Add Favorite</button>
+          <input type="text" name = "query_note" placeholder="Add Note">
+          </form>
+        </div>
+      <%else%>
+        Already a Favorite <a href="/delete_favorite_place/<%=@the_work_location.id%>">Remove Favorite</a>
+      <%end%>
+    <%end%>
+
+
 <h2>Ratings</h2>
 
 <% if current_user!=nil and Rating.where({:location_id=>@the_work_location.id}).where({:user_id=>current_user.id}).at(0)==nil%> 
@@ -109,10 +136,12 @@
     <th>Noise</th>
   </tr>
   <tr>
-    <td><%= @the_work_location.average_rating %></td>
-    <td><%= @the_work_location.wifi_speed %></td>
-    <td><%= @the_work_location.crowding_average %></td>
-    <td><%= @the_work_location.noise_average %></td>
+    <%if Rating.where({:location_id =>@the_work_location.id}).at(0)!=nil%>
+    <td><%=Rating.where({:location_id =>@the_work_location.id}).average(:stars).round(1)%></td>
+    <td><%= Rating.where({:location_id =>@the_work_location.id}).average(:wifi_rating).round(1) %></td>
+    <td><%= Rating.where({:location_id =>@the_work_location.id}).average(:crowding_score).round(1) %></td>
+    <td><%= Rating.where({:location_id =>@the_work_location.id}).average(:noise_level).round(1) %></td>
+    <%end%>
 
 </table>
 </div>
@@ -126,6 +155,7 @@
     <th>Crowding</th>
     <th>Noise</th>
     <th>Comment</th>
+    <th></th>
   </tr>
 
   <%if @ratings.present?%>
@@ -135,14 +165,21 @@
         <td><%= a_rating.user.email%></td>
         <td><%= a_rating.stars %></td>
         <td><%= a_rating.wifi_rating %></td>
-        <td><%= a_rating.noise_level %></td>
         <td><%= a_rating.crowding_score %></td>
+        <td><%= a_rating.noise_level %></td>
         <td><%= a_rating.content %></td>
+        <td>
+          <%if current_user!=nil and a_rating.user_id==current_user.id%>
+            <a href="/delete_rating/<%=a_rating.id%>">Delete Rating</a>
+          <%end%>
+        </td>
       </tr>
     <%end%>
   <%end%>
 </table>
 </div>
 </div>
+
+
 
 <hr>

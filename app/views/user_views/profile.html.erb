@@ -2,14 +2,14 @@
 
 <div>
   <div>
-    <h2>
+    <h3>
       <a href="/users/edit">Edit profile</a>
-    </h2>
+    </h3>
   <div>
   <div>
-    <h1>
+    <h2>
       List of all favorite places
-    </h1>
+    </h2>
   </div>
 </div>
 
@@ -35,7 +35,7 @@
         </th>
 
         <th>
-          Updated On
+    
         </th>
 
         <th>
@@ -57,7 +57,9 @@
           <%= time_ago_in_words(a_favorite_place.created_at) %> ago
         </td>
         <td>
-          <%= time_ago_in_words(a_favorite_place.updated_at) %> ago
+            <a href="/delete_favorite_place/<%=a_favorite_place.place_id%>">
+            Remove Favorite
+          </a>
         </td>
 
         <td>

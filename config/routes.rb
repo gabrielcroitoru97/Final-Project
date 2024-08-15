@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   #------------------------------
   # Routes for the Image resource:
   # CREATE
-  post("/insert_image", { :controller => "images", :action => "create" })
+  post("/insert_image/:path_id", { :controller => "images", :action => "create" })
 
   get("/images/:path_id", { :controller => "images", :action => "show" })
 

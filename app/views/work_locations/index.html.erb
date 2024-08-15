@@ -46,7 +46,7 @@
             </td>
 
             <td>
-              <%= a_work_location.average_rating %>
+              <%=Rating.where({:location_id =>a_work_location.id}).average(:stars).round(1)%>
             </td>
 
             <td>

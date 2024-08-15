@@ -45,15 +45,9 @@ class WorkLocationsController < ApplicationController
     the_work_location.description = params.fetch("query_description")
     the_work_location.name = params.fetch("query_name")
     the_work_location.average_rating  = Rating.where({:location_id =>the_work_location.id}).average(:stars)
-    the_work_location.owner_id = current_user.id#params.fetch("query_owner")
-    
+    the_work_location.owner_id = current_user.id
     the_work_location.crowding_average =Rating.where({:location_id =>the_work_location.id}).average(:crowding_score)
-
-    
-    
     the_work_location.noise_average  =Rating.where({:location_id =>the_work_location.id}).average(:noise_level)
-    
-    
     the_work_location.requires_purchase = params.fetch("query_requires_purchase", false)
     the_work_location.membership = params.fetch("query_membership", false)
 

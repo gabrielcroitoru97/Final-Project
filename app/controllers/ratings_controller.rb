@@ -9,11 +9,8 @@ class RatingsController < ApplicationController
 
   def show
     the_id = params.fetch("path_id")
-
     matching_ratings = Rating.where({ :id => the_id })
-
     @the_rating = matching_ratings.at(0)
-
     render({ :template => "ratings/show" })
   end
 
@@ -31,6 +28,12 @@ class RatingsController < ApplicationController
     the_rating.wifi_rating = params.fetch("query_wifi_rating")
     the_rating.crowding_score = params.fetch("query_crowding_score")
     the_rating.noise_level = params.fetch("query_noise_level")
+    
+    the_work_location=WorkLocation.where({:id=>the_rating.location_id}).at(0)
+    the_work_location.average_rating  = Rating.where({:location_id =>the_work_location.id}).average(:stars)
+    the_work_location.crowding_average =Rating.where({:location_id =>the_work_location.id}).average(:crowding_score)
+    the_work_location.noise_average  =Rating.where({:location_id =>the_work_location.id}).average(:noise_level)
+    the_work_location.wifi_speed =Rating.where({:location_id =>the_work_location.id}).average(:wifi_rating)
 
     if the_rating.valid?
       the_rating.save
@@ -63,9 +66,9 @@ class RatingsController < ApplicationController
   def destroy
     the_id = params.fetch("path_id")
     the_rating = Rating.where({ :id => the_id }).at(0)
-
+    the_location=the_rating.location_id
     the_rating.destroy
 
-    redirect_to("/ratings", { :notice => "Rating deleted successfully."} )
+    redirect_to("/work_locations/#{the_location}", { :notice => "Rating deleted successfully."} )
   end
 end

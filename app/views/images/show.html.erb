@@ -1,101 +1,39 @@
 <div>
   <div>
     <h1>
-      Image #<%= @the_image.id %> details
+      Images for <%=WorkLocation.where({:id=>@the_id}).at(0).name%>
     </h1>
+  </div>
 
-    <div>
-      <div>
-        <a href="/images">
-          Go back
-        </a>
-      </div>
+  <div>
+    <a href="/work_locations/<%=@the_id%>">
+            Go back
+      </a>
+ </div>
+ 
+<div>
+ <table border ="1">
+  <tr>
+    <th>Image</th>
+    <th>Posted By</th>
+    <th>Posted On</th>
+    <th>Delete?</th>
+  </tr>
 
-      <div>
-        <a href="/delete_image/<%= @the_image.id %>">
+  <%@matching_images.each do |an_image| %>
+  <tr>
+    <td> <img src="<%= an_image.picture %>" width="400"> </td>
+    <td> <%=an_image.poster.email%> </td>
+    <td> <%= time_ago_in_words(an_image.created_at) %> ago</td>
+    <td> 
+      
+      <%if current_user != nil and an_image.poster_id == current_user.id%>
+        <a href="/delete_image/<%= an_image.id %>">
           Delete image
         </a>
-      </div>
-    </div>
-
-    <dl>
-      <dt>
-        Location
-      </dt>
-      <dd>
-        <%= @the_image.location_id %>
-      </dd>
-
-      <dt>
-        Poster
-      </dt>
-      <dd>
-        <%= @the_image.poster_id %>
-      </dd>
-
-      <dt>
-        Picture
-      </dt>
-      <dd>
-        <%= @the_image.picture %>
-      </dd>
-
-      <dt>
-        Created at
-      </dt>
-      <dd>
-        <%= time_ago_in_words(@the_image.created_at) %> ago
-      </dd>
-
-      <dt>
-        Updated at
-      </dt>
-      <dd>
-        <%= time_ago_in_words(@the_image.updated_at) %> ago
-      </dd>
-    </dl>
-  </div>
+      <%end%>
+      </td>
+    </tr>
+  <%end%>
+ </div>
 </div>
-
-<hr>
-
-
-<div>
-  <div>
-    <h2>
-      Edit image
-    </h2>
-
-    <form action="/modify_image/<%= @the_image.id %>"  method="post" >
-      <div>
-        <label for="location_id_box">
-          Location
-        </label>
-
-        <input type="text" id="location_id_box" name="query_location_id" value="<%= @the_image.location_id %>">
-      </div>
-
-      <div>
-        <label for="poster_id_box">
-          Poster
-        </label>
-
-        <input type="text" id="poster_id_box" name="query_poster_id" value="<%= @the_image.poster_id %>">
-      </div>
-
-      <div>
-        <label for="picture_box">
-          Picture
-        </label>
-
-        <input type="text" id="picture_box" name="query_picture" value="<%= @the_image.picture %>">
-      </div>
-
-      <button>
-        Update image
-      </button>
-    </form>
-  </div>
-</div>
-
-<hr>
