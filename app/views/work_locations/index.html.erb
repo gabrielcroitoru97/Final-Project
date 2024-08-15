@@ -46,7 +46,9 @@
             </td>
 
             <td>
-              <%=Rating.where({:location_id =>a_work_location.id}).average(:stars).round(1)%>
+              <%if Rating.where({:location_id =>a_work_location.id}).at(0)!=nil%>
+                <%=Rating.where({:location_id =>a_work_location.id}).average(:stars).round(1)%>
+              <%end%>
             </td>
 
             <td>

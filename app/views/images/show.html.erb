@@ -7,9 +7,18 @@
 
   <div>
     <a href="/work_locations/<%=@the_id%>">
-            Go back
+          Back to location details
       </a>
  </div>
+
+  <% if current_user!=nil%> 
+    <form action="/insert_image/<%= @the_id %>" method="post">
+    <button>Add image</button>
+    <input type="text" name = "query_image_url" placeholder="Input URL">
+    
+    </form>
+    
+  <%end%>
  
 <div>
  <table border ="1">
