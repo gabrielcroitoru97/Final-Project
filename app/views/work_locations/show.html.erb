@@ -181,5 +181,29 @@
 </div>
 
 
+<%gapiaddress = @the_work_location.address.gsub(" ","+")%>
+<%gapi = [
+  gapiaddress,
+  @the_work_location.city,
+  @the_work_location.state,
+  @the_work_location.zip_code
+].map(&:to_s).join('+')%>
+<%api="https://www.google.com/maps/embed/v1/place?key=AIzaSyBOmkmNEI6pvBlaQLHufHriV05FQruquog
+    &q="%>
+<%gapi2=api+gapi%>
+
+
+
+
+<iframe
+  width="600"
+  height="450"
+  style="border:0"
+  loading="lazy"
+  allowfullscreen
+  referrerpolicy="no-referrer-when-downgrade"
+  src="<%=gapi2%>"
+</iframe>
+
 
 <hr>
