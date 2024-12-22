@@ -1,5 +1,9 @@
 <h2> User: <%=current_user.email%></h2>
 
+<% if current_user.admin? %>
+  <h1 style="color: red;">ADMIN</h1>
+<% end %>
+
 <div>
   <div>
     <h3>
@@ -15,53 +19,28 @@
 
 <hr>
 
-
 <hr>
 <div>
   <div>
     <table border="1">
       <tr>
-
-        <th>
-          Place
-        </th>
-
-        <th>
-          Note
-        </th>
-
-        <th>
-          Added On
-        </th>
-
-        <th>
-    
-        </th>
-
-        <th>
-        </th>
+        <th>Place</th>
+        <th>Note</th>
+        <th>Added On</th>
+        <th></th>
+        <th></th>
       </tr>
 
       <% @list_of_favorite_places.each do |a_favorite_place| %>
       <tr>
-
+        <td><%= a_favorite_place.place.name %></td>
+        <td><%= a_favorite_place.note %></td>
+        <td><%= time_ago_in_words(a_favorite_place.created_at) %> ago</td>
         <td>
-          <%= a_favorite_place.place.name %>
-        </td>
-
-        <td>
-          <%= a_favorite_place.note %>
-        </td>
-
-        <td>
-          <%= time_ago_in_words(a_favorite_place.created_at) %> ago
-        </td>
-        <td>
-            <a href="/delete_favorite_place/<%=a_favorite_place.place_id%>">
+          <a href="/delete_favorite_place/<%=a_favorite_place.place_id%>">
             Remove Favorite
           </a>
         </td>
-
         <td>
           <a href="/work_locations/<%=a_favorite_place.place.id %>">
             Show details

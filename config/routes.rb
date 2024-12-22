@@ -52,5 +52,13 @@ Rails.application.routes.draw do
   get("/delete_work_location/:path_id", { :controller => "work_locations", :action => "destroy" })
   #------------------------------
 
+
+  namespace :admin do
+    resources :form_options, only: [:index, :new, :create, :edit, :update, :destroy]
+  end
+  
+
+  
+
   
 end

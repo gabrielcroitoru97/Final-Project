@@ -1,0 +1,26 @@
+<h1>Manage Form Options</h1>
+<%= link_to "Add New Option", new_admin_form_option_path, class: "btn btn-primary" %>
+
+<table class="table mt-4">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Category</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @form_options.each do |option| %>
+      <tr>
+        <td><%= option.name %></td>
+        <td><%= option.value %></td>
+        <td><%= option.category %></td>
+        <td>
+          <%= link_to "Edit", edit_admin_form_option_path(option), class: "btn btn-sm btn-warning" %>
+          <%= link_to "Delete", admin_form_option_path(option), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

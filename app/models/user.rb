@@ -3,6 +3,7 @@
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
+#  admin                  :boolean          default(FALSE), not null
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  remember_created_at    :datetime
@@ -18,27 +19,28 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  
-  has_many  :comments, class_name: "Comment", foreign_key: "commenter_id", dependent: :destroy
-  has_many  :ratings, class_name: "Rating", foreign_key: "user_id", dependent: :destroy
-  has_many  :work_locations, class_name: "WorkLocation", foreign_key: "owner_id", dependent: :destroy
-  has_many  :images, class_name: "Image", foreign_key: "poster_id", dependent: :destroy
-  has_many  :favorite_places, class_name: "FavoritePlace", foreign_key: "user_id", dependent: :destroy
-
-  has_many :preferred_places, through: :work_locations, source: :favorite_places
-  #validates :username, presence: true
-
-  
-  
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
-
-  
-      
-end
+       # Include default devise modules. Others available are:
+       # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+       devise :database_authenticatable, :registerable,
+              :recoverable, :rememberable, :validatable
+     
+       has_many  :comments, class_name: "Comment", foreign_key: "commenter_id", dependent: :destroy
+       has_many  :ratings, class_name: "Rating", foreign_key: "user_id", dependent: :destroy
+       has_many  :work_locations, class_name: "WorkLocation", foreign_key: "owner_id", dependent: :destroy
+       has_many  :images, class_name: "Image", foreign_key: "poster_id", dependent: :destroy
+       has_many  :favorite_places, class_name: "FavoritePlace", foreign_key: "user_id", dependent: :destroy
+     
+       has_many :preferred_places, through: :work_locations, source: :favorite_places
+     
+       # Validations
+       #validates :username, presence: true
+     
+       # Admin Scope
+       scope :admins, -> { where(admin: true) }
+     
+       # Helper Method to Check Admin Status
+       def admin?
+         self.admin
+       end
+     end
+     
