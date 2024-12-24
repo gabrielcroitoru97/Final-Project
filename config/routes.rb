@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+
 
   root to: "work_locations#index"
   
@@ -53,10 +54,10 @@ Rails.application.routes.draw do
   #------------------------------
 
 
-  namespace :admin do
-    resources :form_options, only: [:index, :new, :create, :edit, :update, :destroy]
-  end
   
+namespace :admin do
+
+end
 
   
 

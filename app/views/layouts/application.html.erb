@@ -29,9 +29,6 @@
             <% else %>
               <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
               <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
-              <% if current_user.admin? %>
-                <li class="nav-item"><a class="nav-link" href="<%= admin_form_options_path %>">Manage Options</a></li>
-              <% end %>
               <li class="nav-item"><a class="nav-link" href="/users/sign_out">Sign out</a></li>
             <% end %>
           </ul>
