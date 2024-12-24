@@ -1,133 +1,93 @@
-<div>
-  <div>
-    <h2>
-      Add a new work location
-    </h2>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h2 class="text-center mb-4">Add a New Work Location</h2>
 
-    <form action="/insert_work_location" method="post">
-      <div>
-        <label for="location_type_box">
-          Location type
-        </label>
-        <select name="query_location_type" id="location_type_box">
-           <% @loc_types.each do |item| %>
-             <option value= "<%=item.id %>"><%= item.descriptor %></option>
-           <% end %>
-        </select>
+      <form action="/insert_work_location" method="post" class="p-4 border rounded shadow-sm bg-light">
+        <div class="mb-3">
+          <label for="location_type_box" class="form-label">Location Type</label>
+          <select name="query_location_type" id="location_type_box" class="form-select">
+            <% @loc_types.each do |item| %>
+              <option value="<%= item.id %>"><%= item.descriptor %></option>
+            <% end %>
+          </select>
+        </div>
 
-      <div>
-        <label for="name_box">
-          Name
-        </label>
+        <div class="mb-3">
+          <label for="name_box" class="form-label">Name</label>
+          <input type="text" id="name_box" name="query_name" class="form-control">
+        </div>
 
-        <input type="text" id="name_box" name="query_name">
-      </div>
+        <div class="mb-3">
+          <label for="address_box" class="form-label">Address</label>
+          <input type="text" id="address_box" name="query_address" class="form-control">
+        </div>
 
-      </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="weekday_opening_box" class="form-label">Weekday Opening</label>
+            <input type="time" id="weekday_opening_box" name="query_weekday_opening" class="form-control">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="weekday_closing_box" class="form-label">Weekday Closing</label>
+            <input type="time" id="weekday_closing_box" name="query_weekday_closing" class="form-control">
+          </div>
+        </div>
 
-      <div>
-        <label for="address_box">
-          Address
-        </label>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="weekend_opening_box" class="form-label">Weekend Opening</label>
+            <input type="time" id="weekend_opening_box" name="query_weekend_opening" class="form-control">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="weekend_closing_box" class="form-label">Weekend Closing</label>
+            <input type="time" id="weekend_closing_box" name="query_weekend_closing" class="form-control">
+          </div>
+        </div>
 
-        <input type="text" id="address_box" name="query_address">
-      </div>
+        <div class="mb-3">
+          <label for="phone_number_box" class="form-label">Phone Number</label>
+          <input type="text" id="phone_number_box" name="query_phone_number" class="form-control">
+        </div>
 
-      <div>
-        <label for="weekday_opening_box">
-          Weekday opening
-        </label>
+        <div class="mb-3">
+          <label for="website_box" class="form-label">Website</label>
+          <input type="text" id="website_box" name="query_website" class="form-control">
+        </div>
 
-        <input type="time" id="weekday_opening_box" name="query_weekday_opening">
-      </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="city_box" class="form-label">City</label>
+            <input type="text" id="city_box" name="query_city" class="form-control">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="state_box" class="form-label">State</label>
+            <input type="text" id="state_box" name="query_state" class="form-control">
+          </div>
+        </div>
 
-      <div>
-        <label for="weekday_closing_box">
-          Weekday closing
-        </label>
+        <div class="mb-3">
+          <label for="zip_code_box" class="form-label">Zip Code</label>
+          <input type="text" id="zip_code_box" name="query_zip_code" class="form-control">
+        </div>
 
-        <input type="time" id="weekday_closing_box" name="query_weekday_closing">
-      </div>
+        <div class="mb-3">
+          <label for="description_box" class="form-label">Description</label>
+          <textarea id="description_box" name="query_description" rows="3" class="form-control"></textarea>
+        </div>
 
-      <div>
-        <label for="weekend_opening_box">
-          Weekend opening
-        </label>
+        <div class="form-check mb-3">
+          <input type="checkbox" id="requires_purchase_box" name="query_requires_purchase" value="1" class="form-check-input">
+          <label for="requires_purchase_box" class="form-check-label">Requires Purchase</label>
+        </div>
 
-        <input type="time" id="weekend_opening_box" name="query_weekend_opening">
-      </div>
+        <div class="form-check mb-4">
+          <input type="checkbox" id="membership_box" name="query_membership" value="1" class="form-check-input">
+          <label for="membership_box" class="form-check-label">Membership</label>
+        </div>
 
-      <div>
-        <label for="weekend_closing_box">
-          Weekend closing
-        </label>
-
-        <input type="time" id="weekend_closing_box" name="query_weekend_closing">
-      </div>
-
-      <div>
-        <label for="phone_number_box">
-          Phone number
-        </label>
-
-        <input type="text" id="phone_number_box" name="query_phone_number">
-      </div>
-
-      <div>
-        <label for="website_box">
-          Website
-        </label>
-
-        <input type="text" id="website_box" name="query_website">
-      </div>
-
-      <div>
-        <label for="city_box">
-          City
-        </label>
-
-        <input type="text" id="city_box" name="query_city">
-      </div>
-
-      <div>
-        <label for="state_box">
-          State
-        </label>
-
-        <input type="text" id="state_box" name="query_state">
-      </div>
-
-      <div>
-        <label for="zip_code_box">
-          Zip code
-        </label>
-
-        <input type="text" id="zip_code_box" name="query_zip_code">
-      </div>
-
-      <div>
-        <label for="description_box">
-          Description
-        </label>
-
-        <textarea id="description_box" name="query_description" rows="3"></textarea>
-      </div>
-
-      <div>
-        <input type="checkbox" id="requires_purchase_box" name="query_requires_purchase" value="1">
-
-        <label for="requires_purchase_box">Requires purchase</label>
-      </div>
-
-      <div>
-        <input type="checkbox" id="membership_box" name="query_membership" value="1">
-
-        <label for="membership_box">Membership</label>
-      </div>
-
-      <button>
-        Create work location
-      </button>
-    </form>
+        <button type="submit" class="btn btn-primary w-100">Create Work Location</button>
+      </form>
+    </div>
   </div>
 </div>

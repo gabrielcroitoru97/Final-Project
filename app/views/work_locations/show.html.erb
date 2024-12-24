@@ -1,208 +1,149 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <h2 class="text-center mb-4"> <%= @the_work_location.name %> Details </h2>
 
-
-
-<div>
-  <div>
-    <h2>
-      <%= @the_work_location.name %> details
-    </h2>
-
-    <div>
-
-  <%if Image.where({:location_id=>@the_work_location.id}).at(0) != nil%>
-    <div>
-      <div>
-        <img src="<%=Image.where({:location_id=>@the_work_location.id}).sample.picture%>"
-          width="400"
-          >
-      </div>
-      <div>
-       <a href="/images/<%=@the_work_location.id%>">View all images </a>
-      </div>
-      
-    </div>
-  <%end%>
-
-  <% if current_user!=nil%> 
-    <form action="/insert_image/<%= @the_work_location.id %>" method="post">
-    <button>Add image</button>
-    <input type="text" name = "query_image_url" placeholder="Input URL">
-    
-    </form>
-    
-  <%end%>
-
-  <table border ="1">
-    <tr>
-      <td>Location type</td>
-      <td><%= LocationType.where({:id=>@the_work_location.location_type_id}).at(0).descriptor %></td>
-    </tr>
-    <tr>
-      <td>Name</td>
-      <td><%= @the_work_location.name %></td>
-    </tr>
-    <tr>
-      <td>Description</td>
-      <td><%= @the_work_location.description %></td>
-    </tr>
-    <tr>
-      <td>Address</td>
-      <td><%= @the_work_location.address %></td>
-    </tr>
-
-    <tr>
-      <td>City</td>
-      <td><%= @the_work_location.city %></td>
-    </tr>
-    <tr>
-      <td>State</td>
-      <td><%= @the_work_location.state %></td>
-    </tr>
-    <tr>
-      <td>Zip Code</td>
-      <td><%= @the_work_location.zip_code %></td>
-    </tr>
-    <tr>
-      <td>Phone number</td>
-      <td><%= @the_work_location.phone_number %></td>
-    </tr>
-
-    <tr>
-      <td>Website</td>
-      <td> <%= @the_work_location.website %></td>
-    </tr>
-
-    <tr>
-      <td>Weekday hours</td>
-      <td><%= @the_work_location.weekday_opening.strftime("%I:%M %P") %> - <%= @the_work_location.weekday_closing.strftime("%I:%M %P") %></td>
-    </tr>
-    <tr>
-      <td>Weekend Hours</td>
-      <td><%= @the_work_location.weekend_opening.strftime("%I:%M %P") %> - <%= @the_work_location.weekend_closing.strftime("%I:%M %P") %></td>
-    </tr>
-
-    <tr>
-      <td>Requires purchase</td>
-      <td><%= @the_work_location.requires_purchase %></td>
-    </tr>
-    <tr>
-      <td>Membership</td>
-      <td><%= @the_work_location.membership %></td>
-    </tr>
-  </table>
-</div>
-
-
-    <% if current_user!=nil%> 
-      <%if @the_work_location.owner_id==current_user.id%>
-        <div>
-          <a href="/delete_work_location/<%= @the_work_location.id %>">
-            Delete work location
-          </a>
+      <%# Refactored: Optimize image query %>
+      <% location_image = Image.where(location_id: @the_work_location.id).sample %>
+      <% if location_image %>
+        <div class="mb-4 text-center">
+          <img src="<%= location_image.picture %>" class="img-fluid rounded" alt="Location Image" style="max-width: 100%; height: auto;">
+          <div class="mt-2">
+            <a href="/images/<%= @the_work_location.id %>" class="btn btn-outline-primary">View All Images</a>
+          </div>
         </div>
-      </div>
+      <% end %>
 
-      <div>
-        <a href="/edit_work_location/<%= @the_work_location.id %>">
-          Edit Work Location
-        </a>
-      </div>
-      <%end%>
-    
-      <%if FavoritePlace.where({:place_id=>@the_work_location.id}).where({:user_id=>current_user.id}).at(0)==nil%>
-        <div>
-          <form action="/insert_favorite_place/<%= @the_work_location.id %>" method="post">
-          <button>Add Favorite</button>
-          <input type="text" name = "query_note" placeholder="Add Note">
+      <% if current_user %>
+        <form action="/insert_image/<%= @the_work_location.id %>" method="post" class="mb-4">
+          <div class="input-group">
+            <input type="text" name="query_image_url" class="form-control" placeholder="Image URL">
+            <button type="submit" class="btn btn-primary">Add Image</button>
+          </div>
+        </form>
+      <% end %>
+
+      <%# Refactored: Extract location type %>
+      <% location_type = LocationType.find_by(id: @the_work_location.location_type_id) %>
+      <table class="table table-bordered mb-4">
+        <tr><th>Location Type</th><td><%= location_type&.descriptor || "N/A" %></td></tr>
+        <tr><th>Name</th><td><%= @the_work_location.name %></td></tr>
+        <tr><th>Description</th><td><%= @the_work_location.description %></td></tr>
+        <tr><th>Address</th><td><%= @the_work_location.address %></td></tr>
+        <tr><th>City</th><td><%= @the_work_location.city %></td></tr>
+        <tr><th>State</th><td><%= @the_work_location.state %></td></tr>
+        <tr><th>Zip Code</th><td><%= @the_work_location.zip_code %></td></tr>
+        <tr><th>Phone Number</th><td><%= @the_work_location.phone_number %></td></tr>
+        <tr><th>Website</th><td><a href="<%= @the_work_location.website %>" target="_blank"><%= @the_work_location.website %></a></td></tr>
+        <tr><th>Weekday Hours</th><td><%= @the_work_location.weekday_opening.strftime("%I:%M %P") %> - <%= @the_work_location.weekday_closing.strftime("%I:%M %P") %></td></tr>
+        <tr><th>Weekend Hours</th><td><%= @the_work_location.weekend_opening.strftime("%I:%M %P") %> - <%= @the_work_location.weekend_closing.strftime("%I:%M %P") %></td></tr>
+        <tr><th>Requires Purchase</th><td><%= @the_work_location.requires_purchase ? "Yes" : "No" %></td></tr>
+        <tr><th>Membership</th><td><%= @the_work_location.membership ? "Yes" : "No" %></td></tr>
+      </table>
+
+      <% if current_user && @the_work_location.owner_id == current_user.id %>
+        <div class="d-flex justify-content-between mb-4">
+          <a href="/edit_work_location/<%= @the_work_location.id %>" class="btn btn-warning">Edit Work Location</a>
+          <a href="/delete_work_location/<%= @the_work_location.id %>" class="btn btn-danger">Delete Work Location</a>
+        </div>
+      <% end %>
+
+      <%# Refactored: Optimize favorite place check %>
+      <% is_favorite = FavoritePlace.exists?(place_id: @the_work_location.id, user_id: current_user&.id) %>
+      <% if current_user %>
+        <% if is_favorite %>
+          <p>Already a Favorite. <a href="/delete_favorite_place/<%= @the_work_location.id %>" class="text-danger">Remove Favorite</a></p>
+        <% else %>
+          <form action="/insert_favorite_place/<%= @the_work_location.id %>" method="post" class="mb-4">
+            <div class="input-group">
+              <input type="text" name="query_note" class="form-control" placeholder="Add Note">
+              <button type="submit" class="btn btn-success">Add Favorite</button>
+            </div>
           </form>
-        </div>
-      <%else%>
-        Already a Favorite <a href="/delete_favorite_place/<%=@the_work_location.id%>">Remove Favorite</a>
-      <%end%>
-    <%end%>
+        <% end %>
+      <% end %>
 
+      <h3 class="mb-3 text-center">Ratings</h3>
 
-<h2>Ratings</h2>
+      <%# Refactored: Extract average ratings %>
+      <% avg_ratings = {
+           stars: Rating.where(location_id: @the_work_location.id).average(:stars),
+           wifi: Rating.where(location_id: @the_work_location.id).average(:wifi_rating),
+           crowding: Rating.where(location_id: @the_work_location.id).average(:crowding_score),
+           noise: Rating.where(location_id: @the_work_location.id).average(:noise_level)
+      }.transform_values { |v| v&.round(1) || 0 } %>
 
-<% if current_user!=nil and Rating.where({:location_id=>@the_work_location.id}).where({:user_id=>current_user.id}).at(0)==nil%> 
-  <a href="/add_rating/<%= @the_work_location.id %>">Rate This Location</a>
-<%end%>
-<div>
-<table border = "1">
-  <tr>
-    <th>Average Rating</th>
-    <th>Wifi</th>
-    <th>Crowding</th>
-    <th>Noise</th>
-  </tr>
-  <tr>
-    <%if Rating.where({:location_id =>@the_work_location.id}).at(0)!=nil%>
-    <td><%=Rating.where({:location_id =>@the_work_location.id}).average(:stars).round(1)%></td>
-    <td><%= Rating.where({:location_id =>@the_work_location.id}).average(:wifi_rating).round(1) %></td>
-    <td><%= Rating.where({:location_id =>@the_work_location.id}).average(:crowding_score).round(1) %></td>
-    <td><%= Rating.where({:location_id =>@the_work_location.id}).average(:noise_level).round(1) %></td>
-    <%end%>
+      <% if current_user && Rating.where(location_id: @the_work_location.id, user_id: current_user.id).none? %>
+        <a href="/add_rating/<%= @the_work_location.id %>" class="btn btn-outline-primary mb-4">Rate This Location</a>
+      <% end %>
 
-</table>
+      <div class="table-responsive mb-4 text-center">
+        <table class="table table-striped d-inline-block">
+          <thead>
+            <tr>
+              <th>Average Rating</th>
+              <th>Wifi</th>
+              <th>Crowding</th>
+              <th>Noise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <% avg_ratings.each do |key, rating| %>
+                <td>
+                  <%= rating %> / 5
+                </td>
+              <% end %>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-responsive mb-4 text-center">
+        <table class="table d-inline-block">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Overall</th>
+              <th>Wifi</th>
+              <th>Crowding</th>
+              <th>Noise</th>
+              <th>Comment</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @ratings.each do |a_rating| %>
+              <tr>
+                <td><%= a_rating.user.email %></td>
+                <% [:stars, :wifi_rating, :crowding_score, :noise_level].each do |field| %>
+                  <td>
+                    <%= a_rating.send(field) %> / 5
+                  </td>
+                <% end %>
+                <td><%= a_rating.content %></td>
+                <td>
+                  <% if current_user && a_rating.user_id == current_user.id %>
+                    <a href="/delete_rating/<%= a_rating.id %>" class="btn btn-sm btn-danger">Delete</a>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <%# Refactored: Optimize Google Maps generation %>
+      <% gapi2 = "https://www.google.com/maps/embed/v1/place?key=&q=" + [@the_work_location.address, @the_work_location.city, @the_work_location.state, @the_work_location.zip_code].compact.join('+') %>
+      <iframe
+        width="100%"
+        height="450"
+        style="border:0"
+        loading="lazy"
+        allowfullscreen
+        referrerpolicy="no-referrer-when-downgrade"
+        src="<%= gapi2 %>">
+      </iframe>
+    </div>
+  </div>
 </div>
-  <br>
-<div>
-<table border = "1">
-  <tr>
-    <th>User</th>
-    <th>Overall</th>
-    <th>Wifi</th>
-    <th>Crowding</th>
-    <th>Noise</th>
-    <th>Comment</th>
-    <th></th>
-  </tr>
-
-  <%if @ratings.present?%>
-    <% @ratings.each do |a_rating| %>
-  
-      <tr>
-        <td><%= a_rating.user.email%></td>
-        <td><%= a_rating.stars %></td>
-        <td><%= a_rating.wifi_rating %></td>
-        <td><%= a_rating.crowding_score %></td>
-        <td><%= a_rating.noise_level %></td>
-        <td><%= a_rating.content %></td>
-        <td>
-          <%if current_user!=nil and a_rating.user_id==current_user.id%>
-            <a href="/delete_rating/<%=a_rating.id%>">Delete Rating</a>
-          <%end%>
-        </td>
-      </tr>
-    <%end%>
-  <%end%>
-</table>
-</div>
-</div>
-
-
-<%gapiaddress = @the_work_location.address.gsub(" ","+")%>
-<%gapi = [
-  gapiaddress,
-  @the_work_location.city,
-  @the_work_location.state,
-  @the_work_location.zip_code
-].map(&:to_s).join('+')%>
-<%api="https://www.google.com/maps/embed/v1/place?key=
-    &q="%>
-<%gapi2=api+gapi%>
-
-
-
-<iframe
-  width="600"
-  height="450"
-  style="border:0"
-  loading="lazy"
-  allowfullscreen
-  referrerpolicy="no-referrer-when-downgrade"
-  src="<%=gapi2%>"
-</iframe>
-
-
-<hr>
