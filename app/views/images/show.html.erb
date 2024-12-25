@@ -1,48 +1,54 @@
-<div>
-  <div>
-    <h1>
-      Images for <%=WorkLocation.where({:id=>@the_id}).at(0).name%>
-    </h1>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="text-center mb-4">
+        Images for <%= WorkLocation.find_by(id: @the_id)&.name || "Unknown Location" %>
+      </h1>
+    </div>
   </div>
 
-  <div>
-    <a href="/work_locations/<%=@the_id%>">
-          Back to location details
-      </a>
- </div>
+  <div class="mb-3 text-center">
+    <a href="/work_locations/<%= @the_id %>" class="btn btn-outline-secondary">
+      Back to Location Details
+    </a>
+  </div>
 
-  <% if current_user!=nil%> 
-    <form action="/insert_image/<%= @the_id %>" method="post">
-    <button>Add image</button>
-    <input type="text" name = "query_image_url" placeholder="Input URL">
-    
+  <% if current_user %>
+    <form action="/insert_image/<%= @the_id %>" method="post" enctype="multipart/form-data" class="mb-4">
+      <div class="input-group">
+        <input type="file" name="image_file" class="form-control" id="imageUpload">
+        <button type="submit" class="btn btn-primary">Add Image</button>
+      </div>
     </form>
-    
-  <%end%>
- 
-<div>
- <table border ="1">
-  <tr>
-    <th>Image</th>
-    <th>Posted By</th>
-    <th>Posted On</th>
-    <th>Delete?</th>
-  </tr>
+  <% end %>
 
-  <%@matching_images.each do |an_image| %>
-  <tr>
-    <td> <img src="<%= an_image.picture %>" width="400"> </td>
-    <td> <%=an_image.poster.email%> </td>
-    <td> <%= time_ago_in_words(an_image.created_at) %> ago</td>
-    <td> 
-      
-      <%if current_user != nil and an_image.poster_id == current_user.id%>
-        <a href="/delete_image/<%= an_image.id %>">
-          Delete image
-        </a>
-      <%end%>
-      </td>
-    </tr>
-  <%end%>
- </div>
+  <% if @matching_images.any? %>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+      <% @matching_images.each do |an_image| %>
+        <div class="col">
+          <div class="card shadow-sm">
+            <% if an_image.picture.attached? %>
+              <img src="<%= url_for(an_image.picture) %>" class="card-img-top" alt="Image" style="object-fit: cover; max-height: 200px;">
+            <% else %>
+              <div class="card-img-top text-center py-5 bg-light text-muted">
+                No Image Available
+              </div>
+            <% end %>
+            <div class="card-body">
+              <p class="card-text">Posted by: <%= an_image.poster.email %></p>
+              <p class="card-text">Posted <%= time_ago_in_words(an_image.created_at) %> ago</p>
+              <% if current_user && an_image.poster_id == current_user.id %>
+                <a href="/delete_image/<%= an_image.id %>" class="btn btn-danger btn-sm">Delete Image</a>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="alert alert-warning text-center" role="alert">
+      No images have been uploaded for this location.
+    </div>
+  <% end %>
 </div>
+

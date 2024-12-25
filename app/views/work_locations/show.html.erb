@@ -1,42 +1,66 @@
 <div class="container mt-5">
   <div class="row">
     <div class="col-lg-8 mx-auto">
-      <h2 class="text-center mb-4"> <%= @the_work_location.name %> Details </h2>
+      <h2 class="text-center mb-4"> <%= @the_work_location.name.presence || "Location Details" %> </h2>
 
-      <%# Refactored: Optimize image query %>
-      <% location_image = Image.where(location_id: @the_work_location.id).sample %>
-      <% if location_image %>
-        <div class="mb-4 text-center">
-          <img src="<%= location_image.picture %>" class="img-fluid rounded" alt="Location Image" style="max-width: 100%; height: auto;">
-          <div class="mt-2">
-            <a href="/images/<%= @the_work_location.id %>" class="btn btn-outline-primary">View All Images</a>
+      <%# Refactored: Display all images as a carousel %>
+      <% location_images = Image.where(location_id: @the_work_location.id) %>
+      <% if location_images.any? %>
+        <div id="locationImageCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <% location_images.each_with_index do |image, index| %>
+              <div class="carousel-item <%= 'active' if index == 0 %>">
+                <img src="<%= url_for(image.picture) %>" class="d-block w-100 rounded" alt="Location Image" style="max-height: 400px; object-fit: cover;">
+              </div>
+            <% end %>
           </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#locationImageCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#locationImageCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+        <a href="/images/<%= @the_work_location.id %>">
+             Show All Images
+        </a>
+      <% else %>
+        <div class="mb-4 text-center">
+          <p>No images available for this location.</p>
         </div>
       <% end %>
 
       <% if current_user %>
-        <form action="/insert_image/<%= @the_work_location.id %>" method="post" class="mb-4">
-          <div class="input-group">
-            <input type="text" name="query_image_url" class="form-control" placeholder="Image URL">
-            <button type="submit" class="btn btn-primary">Add Image</button>
+        <form action="/insert_image/<%= @the_work_location.id %>" method="post" class="mb-4" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="file_input" class="form-label">Upload Image</label>
+            <input type="file" id="file_input" name="image_file" class="form-control">
           </div>
+          <button type="submit" class="btn btn-primary">Upload Image</button>
         </form>
       <% end %>
 
-      <%# Refactored: Extract location type %>
+      <%# Refactored: Extract location attributes %>
       <% location_type = LocationType.find_by(id: @the_work_location.location_type_id) %>
       <table class="table table-bordered mb-4">
         <tr><th>Location Type</th><td><%= location_type&.descriptor || "N/A" %></td></tr>
-        <tr><th>Name</th><td><%= @the_work_location.name %></td></tr>
-        <tr><th>Description</th><td><%= @the_work_location.description %></td></tr>
-        <tr><th>Address</th><td><%= @the_work_location.address %></td></tr>
-        <tr><th>City</th><td><%= @the_work_location.city %></td></tr>
-        <tr><th>State</th><td><%= @the_work_location.state %></td></tr>
-        <tr><th>Zip Code</th><td><%= @the_work_location.zip_code %></td></tr>
-        <tr><th>Phone Number</th><td><%= @the_work_location.phone_number %></td></tr>
-        <tr><th>Website</th><td><a href="<%= @the_work_location.website %>" target="_blank"><%= @the_work_location.website %></a></td></tr>
-        <tr><th>Weekday Hours</th><td><%= @the_work_location.weekday_opening.strftime("%I:%M %P") %> - <%= @the_work_location.weekday_closing.strftime("%I:%M %P") %></td></tr>
-        <tr><th>Weekend Hours</th><td><%= @the_work_location.weekend_opening.strftime("%I:%M %P") %> - <%= @the_work_location.weekend_closing.strftime("%I:%M %P") %></td></tr>
+        <tr><th>Name</th><td><%= @the_work_location.name.presence || "N/A" %></td></tr>
+        <tr><th>Description</th><td><%= @the_work_location.description.presence || "N/A" %></td></tr>
+        <tr><th>Address</th><td><%= @the_work_location.address.presence || "N/A" %></td></tr>
+        <tr><th>City</th><td><%= @the_work_location.city.presence || "N/A" %></td></tr>
+        <tr><th>State</th><td><%= @the_work_location.state.presence || "N/A" %></td></tr>
+        <tr><th>Zip Code</th><td><%= @the_work_location.zip_code.presence || "N/A" %></td></tr>
+        <tr>
+          <th>Phone Number</th>
+          <td>
+            <%= @the_work_location.phone_number&.gsub(/(\d{3})(\d{3})(\d{4})/, '(\1)\2-\3') || "N/A" %>
+          </td>
+        </tr>
+        <tr><th>Website</th><td><%= @the_work_location.website.present? ? link_to(@the_work_location.website, @the_work_location.website, target: "_blank") : "N/A" %></td></tr>
+        <tr><th>Weekday Hours</th><td><%= (@the_work_location.weekday_opening && @the_work_location.weekday_closing) ? "#{@the_work_location.weekday_opening.strftime("%I:%M %P")} - #{@the_work_location.weekday_closing.strftime("%I:%M %P")}" : "N/A" %></td></tr>
+        <tr><th>Weekend Hours</th><td><%= (@the_work_location.weekend_opening && @the_work_location.weekend_closing) ? "#{@the_work_location.weekend_opening.strftime("%I:%M %P")} - #{@the_work_location.weekend_closing.strftime("%I:%M %P")}" : "N/A" %></td></tr>
         <tr><th>Requires Purchase</th><td><%= @the_work_location.requires_purchase ? "Yes" : "No" %></td></tr>
         <tr><th>Membership</th><td><%= @the_work_location.membership ? "Yes" : "No" %></td></tr>
       </table>

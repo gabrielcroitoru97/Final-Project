@@ -13,9 +13,12 @@ class Image < ApplicationRecord
 
   belongs_to :location, required: true, class_name: "WorkLocation", foreign_key: "location_id"
   belongs_to :poster, required: true, class_name: "User", foreign_key: "poster_id"
+  has_one_attached :picture
 
   validates :poster_id, presence: true
-  validates :picture, presence: true
   validates :location_id, presence: true
+  
+  # Update to allow optional presence of a picture for new records
+  validates :picture, presence: true, on: :create
 
 end

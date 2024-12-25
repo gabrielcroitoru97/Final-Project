@@ -43,6 +43,7 @@ class WorkLocation < ApplicationRecord
   #validates :longitude, presence: true
   validates :location_type_id, presence: true
   #validates :latitude, presence: true
+  validates :phone_number, format: { with: /\A\d{10}\z/, message: "must be 10 digits" }, allow_blank: true
   validates :city, presence: true
   validates :address, presence: true
 

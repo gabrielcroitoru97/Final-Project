@@ -14,13 +14,44 @@
         </div>
 
         <div class="mb-3">
-          <label for="name_box" class="form-label">Name</label>
+          <label for="name_box" class="form-label">Name <span class="text-danger">*</span></label>
           <input type="text" id="name_box" name="query_name" class="form-control">
+          <div id="name_error" class="text-danger mt-2" style="display: none;">
+            Name is required.
+          </div>
         </div>
 
         <div class="mb-3">
-          <label for="address_box" class="form-label">Address</label>
+          <label for="address_box" class="form-label">Address <span class="text-danger">*</span></label>
           <input type="text" id="address_box" name="query_address" class="form-control">
+          <div id="address_error" class="text-danger mt-2" style="display: none;">
+            Address is required.
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="city_box" class="form-label">City <span class="text-danger">*</span></label>
+            <input type="text" id="city_box" name="query_city" class="form-control">
+            <div id="city_error" class="text-danger mt-2" style="display: none;">
+              City is required.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="state_box" class="form-label">State <span class="text-danger">*</span></label>
+            <input type="text" id="state_box" name="query_state" class="form-control">
+            <div id="state_error" class="text-danger mt-2" style="display: none;">
+              State is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="zip_code_box" class="form-label">Zip Code <span class="text-danger">*</span></label>
+          <input type="text" id="zip_code_box" name="query_zip_code" class="form-control">
+          <div id="zip_code_error" class="text-danger mt-2" style="display: none;">
+            Zip Code is required.
+          </div>
         </div>
 
         <div class="row">
@@ -47,28 +78,22 @@
 
         <div class="mb-3">
           <label for="phone_number_box" class="form-label">Phone Number</label>
-          <input type="text" id="phone_number_box" name="query_phone_number" class="form-control">
+          <input
+            type="text"
+            id="phone_number"
+            name="query_phone_number"
+            class="form-control"
+            placeholder="(xxx)xxx-xxxx"
+            maxlength="14"
+          >
+          <div id="phone_number_error" class="text-danger mt-2" style="display: none;">
+            Phone number must be exactly 10 digits.
+          </div>
         </div>
 
         <div class="mb-3">
           <label for="website_box" class="form-label">Website</label>
           <input type="text" id="website_box" name="query_website" class="form-control">
-        </div>
-
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="city_box" class="form-label">City</label>
-            <input type="text" id="city_box" name="query_city" class="form-control">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="state_box" class="form-label">State</label>
-            <input type="text" id="state_box" name="query_state" class="form-control">
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="zip_code_box" class="form-label">Zip Code</label>
-          <input type="text" id="zip_code_box" name="query_zip_code" class="form-control">
         </div>
 
         <div class="mb-3">
@@ -91,3 +116,47 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form");
+    const requiredFields = [
+      { id: "name_box", errorId: "name_error" },
+      { id: "address_box", errorId: "address_error" },
+      { id: "city_box", errorId: "city_error" },
+      { id: "state_box", errorId: "state_error" },
+      { id: "zip_code_box", errorId: "zip_code_error" }
+    ];
+
+    form.addEventListener("submit", function (event) {
+      let isValid = true;
+
+      requiredFields.forEach(({ id, errorId }) => {
+        const input = document.getElementById(id);
+        const errorDiv = document.getElementById(errorId);
+
+        if (!input.value.trim()) {
+          event.preventDefault();
+          errorDiv.style.display = "block";
+          isValid = false;
+        } else {
+          errorDiv.style.display = "none";
+        }
+      });
+
+      const phoneNumberInput = document.getElementById("phone_number");
+      const phoneNumberError = document.getElementById("phone_number_error");
+      const phoneNumber = phoneNumberInput.value.replace(/[^0-9]/g, "");
+
+      if (phoneNumber && phoneNumber.length !== 10) {
+        event.preventDefault();
+        phoneNumberError.style.display = "block";
+        isValid = false;
+      } else {
+        phoneNumberError.style.display = "none";
+      }
+
+      return isValid;
+    });
+  });
+</script>
