@@ -53,6 +53,8 @@ Rails.application.routes.draw do
   get("/delete_work_location/:path_id", { :controller => "work_locations", :action => "destroy" })
   #------------------------------
 
+  get "/search_work_locations", to: "work_locations#search"
+
 
   
 namespace :admin do

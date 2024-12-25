@@ -106,4 +106,34 @@ class WorkLocationsController < ApplicationController
 
     redirect_to("/work_locations", { :notice => "Work location deleted successfully."} )
   end
+
+  def search
+    query = params[:query]
+    radius = params[:radius].to_i || 10 # Default to 10 miles if no radius is provided
+
+    if query.present?
+      # Geocode the query to get latitude and longitude
+      coordinates = Geocoder.coordinates(query)
+
+      if coordinates
+        # Find locations within the radius
+        @list_of_work_locations = WorkLocation.near(coordinates, radius)
+      else
+        @list_of_work_locations = WorkLocation.none
+        flash[:alert] = "Could not find the location for your search query."
+      end
+    else
+      @list_of_work_locations = WorkLocation.all
+    end
+
+    render template: "homepage/index"
+  end
+
+
+
+  def full_address
+    [address, city, state, zip_code].compact.join(', ')
+  end
+
+
 end

@@ -8,8 +8,8 @@
 #  city              :string
 #  crowding_average  :integer
 #  description       :text
-#  latitude          :string
-#  longitude         :string
+#  latitude          :float
+#  longitude         :float
 #  membership        :boolean
 #  name              :string
 #  noise_average     :integer
@@ -30,6 +30,7 @@
 #
 class WorkLocation < ApplicationRecord
 
+  # Associations
   has_many  :comments, class_name: "Comment", foreign_key: "location_id", dependent: :destroy
   has_many  :ratings, class_name: "Rating", foreign_key: "location_id", dependent: :destroy
   has_many  :images, class_name: "Image", foreign_key: "location_id", dependent: :destroy
@@ -37,18 +38,25 @@ class WorkLocation < ApplicationRecord
   belongs_to :owner, required: true, class_name: "User", foreign_key: "owner_id"
   belongs_to :location_type, required: true, class_name: "LocationType", foreign_key: "location_type_id"
 
+  # Validations
   validates :zip_code, presence: true
   validates :state, presence: true
   validates :name, presence: true
-  #validates :longitude, presence: true
   validates :location_type_id, presence: true
-  #validates :latitude, presence: true
-  validates :phone_number, format: { with: /\A\d{10}\z/, message: "must be 10 digits" }, allow_blank: true
   validates :city, presence: true
   validates :address, presence: true
+  validates :phone_number, format: { with: /\A\d{10}\z/, message: "must be 10 digits" }, allow_blank: true
 
-  def type
-    return LocationType.where({:id=>self.location_type_id}).at(0).descriptor
+  # Geocoding Setup
+  geocoded_by :full_address
+  after_validation :geocode, if: ->(obj) { obj.address_changed? || obj.city_changed? || obj.state_changed? || obj.zip_code_changed? }
+
+  # Instance Methods
+  def full_address
+    [address, city, state, zip_code].compact.join(', ')
   end
 
+  def type
+    LocationType.find_by(id: location_type_id)&.descriptor || "Unknown"
+  end
 end
