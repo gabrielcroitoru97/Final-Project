@@ -29,6 +29,7 @@
               <th scope="col">Location Type</th>
               <th scope="col">Name</th>
               <th scope="col">Average Rating</th>
+              <th scope="col">Distance (miles)</th>
               <th scope="col">Details</th>
             </tr>
           </thead>
@@ -40,6 +41,13 @@
                 <td>
                   <% if Rating.where(location_id: a_work_location.id).exists? %>
                     <%= Rating.where(location_id: a_work_location.id).average(:stars).round(1) %>
+                  <% else %>
+                    N/A
+                  <% end %>
+                </td>
+                <td>
+                  <% if a_work_location.distance.present? %>
+                    <%= a_work_location.distance.round(1) %> miles
                   <% else %>
                     N/A
                   <% end %>
@@ -65,3 +73,4 @@
     </div>
   <% end %>
 </div>
+

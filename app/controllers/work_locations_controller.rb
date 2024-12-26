@@ -109,28 +109,43 @@ class WorkLocationsController < ApplicationController
 
   def search
     query = params[:query]
-    radius = params[:radius].to_i || 10 # Default to 10 miles if no radius is provided
-
-    if query.present?
-      # Geocode the query to get latitude and longitude
-      coordinates = Geocoder.coordinates(query)
-
-      if coordinates
-        # Find locations within the radius
-        @list_of_work_locations = WorkLocation.near(coordinates, radius)
-      else
-        @list_of_work_locations = WorkLocation.none
-        flash[:alert] = "Could not find the location for your search query."
-      end
-    else
-      @list_of_work_locations = WorkLocation.all
+    coordinates = query.present? ? Geocoder.coordinates(query) : nil
+  
+    @list_of_work_locations = WorkLocation.all
+  
+    # Use `near` only if coordinates are available
+    if coordinates
+      @list_of_work_locations = @list_of_work_locations.near(coordinates)
     end
-
-    render template: "homepage/index"
+  
+    # Apply additional filters
+    if params[:type].present?
+      @list_of_work_locations = @list_of_work_locations.where(location_type_id: params[:type])
+    end
+  
+    if params[:rating].present?
+      @list_of_work_locations = @list_of_work_locations.joins(:ratings).group("work_locations.id").having("AVG(ratings.stars) >= ?", params[:rating].to_f)
+    end
+  
+    if params[:crowding].present?
+      @list_of_work_locations = @list_of_work_locations.where("crowding_average <= ?", params[:crowding].to_i)
+    end
+  
+    if params[:noise].present?
+      @list_of_work_locations = @list_of_work_locations.where("noise_average <= ?", params[:noise].to_i)
+    end
+  
+    if params[:requires_purchase].present?
+      @list_of_work_locations = @list_of_work_locations.where(requires_purchase: true)
+    end
+  
+    if params[:membership].present?
+      @list_of_work_locations = @list_of_work_locations.where(membership: true)
+    end
+  
+    render :search
   end
-
-
-
+  
   def full_address
     [address, city, state, zip_code].compact.join(', ')
   end

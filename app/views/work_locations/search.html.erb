@@ -1,0 +1,106 @@
+<div class="container mt-5">
+  <div class="row">
+    <!-- Sidebar Filters -->
+    <div class="col-md-3">
+      <h5>Filters</h5>
+      <form action="/search_work_locations" method="get">
+        <!-- Type of Location -->
+        <div class="mb-3">
+          <label for="type_filter" class="form-label">Type of Location</label>
+          <select name="type" id="type_filter" class="form-select">
+            <option value="">All</option>
+            <% LocationType.all.each do |type| %>
+              <option value="<%= type.id %>" <%= params[:type] == type.id.to_s ? 'selected' : '' %>>
+                <%= type.descriptor %>
+              </option>
+            <% end %>
+          </select>
+        </div>
+
+        <!-- Overall Rating -->
+        <div class="mb-3">
+          <label for="rating_filter" class="form-label">Minimum Rating</label>
+          <input type="number" step="0.1" min="1" max="5" name="rating" id="rating_filter" class="form-control" value="<%= params[:rating] %>">
+        </div>
+
+        <!-- Crowding Average -->
+        <div class="mb-3">
+          <label for="crowding_filter" class="form-label">Maximum Crowding</label>
+          <input type="number" step="1" min="1" max="10" name="crowding" id="crowding_filter" class="form-control" value="<%= params[:crowding] %>">
+        </div>
+
+        <!-- Noise Average -->
+        <div class="mb-3">
+          <label for="noise_filter" class="form-label">Maximum Noise</label>
+          <input type="number" step="1" min="1" max="10" name="noise" id="noise_filter" class="form-control" value="<%= params[:noise] %>">
+        </div>
+
+        <!-- Requires Purchase -->
+        <div class="form-check mb-2">
+          <input type="checkbox" class="form-check-input" id="requires_purchase" name="requires_purchase" value="1" <%= params[:requires_purchase] == '1' ? 'checked' : '' %>>
+          <label class="form-check-label" for="requires_purchase">Requires Purchase</label>
+        </div>
+
+        <!-- Membership -->
+        <div class="form-check mb-4">
+          <input type="checkbox" class="form-check-input" id="membership" name="membership" value="1" <%= params[:membership] == '1' ? 'checked' : '' %>>
+          <label class="form-check-label" for="membership">Membership</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+      </form>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9">
+      <div class="text-center">
+        <h1 class="mb-4">Search Results for Work Locations</h1>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Location Type</th>
+              <th scope="col">Name</th>
+              <th scope="col">Average Rating</th>
+              <th scope="col">Distance (miles)</th>
+              <th scope="col">Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if @list_of_work_locations.present? %>
+              <% @list_of_work_locations.each do |a_work_location| %>
+                <tr>
+                  <td><%= a_work_location.type %></td>
+                  <td><%= a_work_location.name %></td>
+                  <td>
+                    <% if Rating.where(location_id: a_work_location.id).exists? %>
+                      <%= Rating.where(location_id: a_work_location.id).average(:stars).round(1) %>
+                    <% else %>
+                      N/A
+                    <% end %>
+                  </td>
+                  <td>
+                    <% if a_work_location.respond_to?(:distance) && a_work_location.distance.present? %>
+                      <%= a_work_location.distance.round(1) %> miles
+                    <% else %>
+                      N/A
+                    <% end %>
+                  </td>
+                  <td>
+                    <a href="/work_locations/<%= a_work_location.id %>" class="btn btn-sm btn-info">Show Details</a>
+                  </td>
+                </tr>
+              <% end %>
+            <% else %>
+              <tr>
+                <td colspan="5" class="text-center">No work locations found matching your criteria.</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
