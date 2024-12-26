@@ -24,3 +24,4 @@ class Rating < ApplicationRecord
 
 
 end
+

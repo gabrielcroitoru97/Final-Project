@@ -9,9 +9,11 @@
         <div id="locationImageCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
           <div class="carousel-inner">
             <% location_images.each_with_index do |image, index| %>
-              <div class="carousel-item <%= 'active' if index == 0 %>">
-                <img src="<%= url_for(image.picture) %>" class="d-block w-100 rounded" alt="Location Image" style="max-height: 400px; object-fit: cover;">
-              </div>
+               <% if image.picture.attached? %>
+                <div class="carousel-item <%= 'active' if index == 0 %>">
+                  <img src="<%= url_for(image.picture) %>" class="d-block w-100 rounded" alt="Location Image" style="max-height: 400px; object-fit: cover;">
+                </div>
+              <% end %>
             <% end %>
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#locationImageCarousel" data-bs-slide="prev">
