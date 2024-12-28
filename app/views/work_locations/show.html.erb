@@ -3,13 +3,13 @@
     <div class="col-lg-8 mx-auto">
       <h2 class="text-center mb-4"> <%= @the_work_location.name.presence || "Location Details" %> </h2>
 
-      <%# Refactored: Display all images as a carousel %>
+      <!-- Image Carousel -->
       <% location_images = Image.where(location_id: @the_work_location.id) %>
       <% if location_images.any? %>
         <div id="locationImageCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
           <div class="carousel-inner">
             <% location_images.each_with_index do |image, index| %>
-               <% if image.picture.attached? %>
+              <% if image.picture.attached? %>
                 <div class="carousel-item <%= 'active' if index == 0 %>">
                   <img src="<%= url_for(image.picture) %>" class="d-block w-100 rounded" alt="Location Image" style="max-height: 400px; object-fit: cover;">
                 </div>
@@ -25,9 +25,7 @@
             <span class="visually-hidden">Next</span>
           </button>
         </div>
-        <a href="/images/<%= @the_work_location.id %>">
-             Show All Images
-        </a>
+        <a href="/images/<%= @the_work_location.id %>">Show All Images</a>
       <% else %>
         <div class="mb-4 text-center">
           <p>No images available for this location.</p>
@@ -44,7 +42,7 @@
         </form>
       <% end %>
 
-      <%# Refactored: Extract location attributes %>
+      <!-- Location Details -->
       <% location_type = LocationType.find_by(id: @the_work_location.location_type_id) %>
       <table class="table table-bordered mb-4">
         <tr><th>Location Type</th><td><%= location_type&.descriptor || "N/A" %></td></tr>
@@ -67,31 +65,7 @@
         <tr><th>Membership</th><td><%= @the_work_location.membership ? "Yes" : "No" %></td></tr>
       </table>
 
-      <% if current_user && @the_work_location.owner_id == current_user.id %>
-        <div class="d-flex justify-content-between mb-4">
-          <a href="/edit_work_location/<%= @the_work_location.id %>" class="btn btn-warning">Edit Work Location</a>
-          <a href="/delete_work_location/<%= @the_work_location.id %>" class="btn btn-danger">Delete Work Location</a>
-        </div>
-      <% end %>
-
-      <%# Refactored: Optimize favorite place check %>
-      <% is_favorite = FavoritePlace.exists?(place_id: @the_work_location.id, user_id: current_user&.id) %>
-      <% if current_user %>
-        <% if is_favorite %>
-          <p>Already a Favorite. <a href="/delete_favorite_place/<%= @the_work_location.id %>" class="text-danger">Remove Favorite</a></p>
-        <% else %>
-          <form action="/insert_favorite_place/<%= @the_work_location.id %>" method="post" class="mb-4">
-            <div class="input-group">
-              <input type="text" name="query_note" class="form-control" placeholder="Add Note">
-              <button type="submit" class="btn btn-success">Add Favorite</button>
-            </div>
-          </form>
-        <% end %>
-      <% end %>
-
-      <h3 class="mb-3 text-center">Ratings</h3>
-
-      <%# Refactored: Extract average ratings %>
+      <!-- Ratings Summary -->
       <% avg_ratings = {
            stars: Rating.where(location_id: @the_work_location.id).average(:stars),
            wifi: Rating.where(location_id: @the_work_location.id).average(:wifi_rating),
@@ -99,32 +73,33 @@
            noise: Rating.where(location_id: @the_work_location.id).average(:noise_level)
       }.transform_values { |v| v&.round(1) || 0 } %>
 
-      <% if current_user && Rating.where(location_id: @the_work_location.id, user_id: current_user.id).none? %>
-        <a href="/add_rating/<%= @the_work_location.id %>" class="btn btn-outline-primary mb-4">Rate This Location</a>
-      <% end %>
-
-      <div class="table-responsive mb-4 text-center">
-        <table class="table table-striped d-inline-block">
-          <thead>
-            <tr>
-              <th>Average Rating</th>
-              <th>Wifi</th>
-              <th>Crowding</th>
-              <th>Noise</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <% avg_ratings.each do |key, rating| %>
-                <td>
-                  <%= rating %> / 5
-                </td>
-              <% end %>
-            </tr>
-          </tbody>
-        </table>
+      <div class="ratings-summary d-flex justify-content-around text-center mb-4">
+        <div class="rating-item">
+          <h5>Overall Rating</h5>
+          <p class="display-6 text-primary"><%= avg_ratings[:stars] %> / 5</p>
+        </div>
+        <div class="rating-item">
+          <h5>Wifi</h5>
+          <p class="display-6 text-primary"><%= avg_ratings[:wifi] %> / 5</p>
+        </div>
+        <div class="rating-item">
+          <h5>Crowding</h5>
+          <p class="display-6 text-primary"><%= avg_ratings[:crowding] %> / 5</p>
+        </div>
+        <div class="rating-item">
+          <h5>Noise</h5>
+          <p class="display-6 text-primary"><%= avg_ratings[:noise] %> / 5</p>
+        </div>
       </div>
 
+      <% if current_user && @the_work_location.owner_id == current_user.id %>
+        <div class="d-flex justify-content-between mb-4">
+          <a href="/edit_work_location/<%= @the_work_location.id %>" class="btn btn-warning">Edit Work Location</a>
+          <a href="/delete_work_location/<%= @the_work_location.id %>" class="btn btn-danger">Delete Work Location</a>
+        </div>
+      <% end %>
+
+      <!-- User Ratings Table -->
       <div class="table-responsive mb-4 text-center">
         <table class="table d-inline-block">
           <thead>
@@ -143,7 +118,7 @@
               <tr>
                 <td><%= a_rating.user.email %></td>
                 <% [:stars, :wifi_rating, :crowding_score, :noise_level].each do |field| %>
-                  <td>
+                  <td style="min-width: 100px;">
                     <%= a_rating.send(field) %> / 5
                   </td>
                 <% end %>
@@ -159,17 +134,24 @@
         </table>
       </div>
 
-      <%# Refactored: Optimize Google Maps generation %>
-      <% gapi2 = "https://www.google.com/maps/embed/v1/place?key=&q=" + [@the_work_location.address, @the_work_location.city, @the_work_location.state, @the_work_location.zip_code].compact.join('+') %>
-      <iframe
-        width="100%"
-        height="450"
-        style="border:0"
-        loading="lazy"
-        allowfullscreen
-        referrerpolicy="no-referrer-when-downgrade"
-        src="<%= gapi2 %>">
-      </iframe>
+<!-- Google Maps Embed -->
+      <% 
+        latitude = @the_work_location.latitude
+        longitude = @the_work_location.longitude
+        gapi2 = "https://www.google.com/maps/embed/v1/place?key=AIzaSyBOmkmNEI6pvBlaQLHufHriV05FQruquo&q=#{latitude},#{longitude}"
+      %>
+<iframe
+  width="100%"
+  height="450"
+  style="border:0"
+  loading="lazy"
+  allowfullscreen
+  referrerpolicy="no-referrer-when-downgrade"
+  src="<%= gapi2 %>">
+</iframe>
+
+<p>Generated URL: <%= gapi2.presence || "No URL Generated" %></p>
+
     </div>
   </div>
 </div>

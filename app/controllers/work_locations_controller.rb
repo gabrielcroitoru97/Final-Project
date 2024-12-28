@@ -111,44 +111,50 @@ class WorkLocationsController < ApplicationController
     query = params[:query]
     coordinates = query.present? ? Geocoder.coordinates(query) : nil
   
+    # Base query
     @list_of_work_locations = WorkLocation.all
   
-    # Use `near` only if coordinates are available
+    # Apply geolocation filter if coordinates are available
     if coordinates
       @list_of_work_locations = @list_of_work_locations.near(coordinates)
     end
   
-    # Apply additional filters
-    if params[:type].present?
-      @list_of_work_locations = @list_of_work_locations.where(location_type_id: params[:type])
-    end
+    # Apply filters sequentially on the existing subset
+    @list_of_work_locations = @list_of_work_locations.where(location_type_id: params[:type]) if params[:type].present?
   
     if params[:rating].present?
-      @list_of_work_locations = @list_of_work_locations.joins(:ratings).group("work_locations.id").having("AVG(ratings.stars) >= ?", params[:rating].to_f)
+      @list_of_work_locations = @list_of_work_locations
+                                  .joins(:ratings)
+                                  .group("work_locations.id")
+                                  .having("AVG(ratings.stars) >= ?", params[:rating].to_f)
     end
   
-    if params[:crowding].present?
-      @list_of_work_locations = @list_of_work_locations.where("crowding_average <= ?", params[:crowding].to_i)
-    end
+    @list_of_work_locations = @list_of_work_locations.where("crowding_average <= ?", params[:crowding].to_i) if params[:crowding].present?
   
-    if params[:noise].present?
-      @list_of_work_locations = @list_of_work_locations.where("noise_average <= ?", params[:noise].to_i)
-    end
+    @list_of_work_locations = @list_of_work_locations.where("noise_average <= ?", params[:noise].to_i) if params[:noise].present?
   
-    if params[:requires_purchase].present?
-      @list_of_work_locations = @list_of_work_locations.where(requires_purchase: true)
-    end
+    @list_of_work_locations = @list_of_work_locations.where(requires_purchase: true) if params[:requires_purchase] == "1"
   
-    if params[:membership].present?
-      @list_of_work_locations = @list_of_work_locations.where(membership: true)
-    end
+    @list_of_work_locations = @list_of_work_locations.where(membership: true) if params[:membership] == "1"
+  
+    # Pass the original query back to the view
+    @query = query
   
     render :search
   end
   
+  # Helper method to construct a full address
+  # Ensure this method is added to the WorkLocation model if not already there
   def full_address
     [address, city, state, zip_code].compact.join(', ')
   end
-
+  
+  
+  # Helper method to construct a full address
+  # Ensure this method is added to the WorkLocation model if not already there
+  def full_address
+    [address, city, state, zip_code].compact.join(', ')
+  end
+  
 
 end

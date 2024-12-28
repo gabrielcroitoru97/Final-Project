@@ -34,6 +34,8 @@ module RailsTemplate
 
     config.action_controller.default_protect_from_forgery = false
 
+    Rails.application.config.google_maps_api_key = 'AIzaSyBOmkmNEI6pvBlaQLHufHriV05FQruquo'
+
     # Don't generate system test files.
     config.generators.system_tests = nil
   end

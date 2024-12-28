@@ -4,6 +4,9 @@
     <div class="col-md-3">
       <h5>Filters</h5>
       <form action="/search_work_locations" method="get">
+        <!-- Preserve search query -->
+        <input type="hidden" name="query" value="<%= @query %>">
+
         <!-- Type of Location -->
         <div class="mb-3">
           <label for="type_filter" class="form-label">Type of Location</label>
@@ -35,6 +38,12 @@
           <input type="number" step="1" min="1" max="10" name="noise" id="noise_filter" class="form-control" value="<%= params[:noise] %>">
         </div>
 
+        <!-- Wifi Rating -->
+        <div class="mb-3">
+          <label for="wifi_filter" class="form-label">Minimum Wifi Rating</label>
+          <input type="number" step="1" min="1" max="5" name="wifi" id="wifi_filter" class="form-control" value="<%= params[:wifi] %>">
+        </div>
+
         <!-- Requires Purchase -->
         <div class="form-check mb-2">
           <input type="checkbox" class="form-check-input" id="requires_purchase" name="requires_purchase" value="1" <%= params[:requires_purchase] == '1' ? 'checked' : '' %>>
@@ -47,7 +56,13 @@
           <label class="form-check-label" for="membership">Membership</label>
         </div>
 
-        <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+        <button type="submit" class="btn btn-primary w-100 mb-2">Apply Filters</button>
+      </form>
+      
+      <!-- Clear Filters Button -->
+      <form action="/search_work_locations" method="get">
+        <input type="hidden" name="query" value="<%= @query %>">
+        <button type="submit" class="btn btn-secondary w-100">Clear Filters</button>
       </form>
     </div>
 
@@ -64,6 +79,7 @@
               <th scope="col">Location Type</th>
               <th scope="col">Name</th>
               <th scope="col">Average Rating</th>
+              <th scope="col">Wifi Rating</th>
               <th scope="col">Distance (miles)</th>
               <th scope="col">Details</th>
             </tr>
@@ -82,6 +98,13 @@
                     <% end %>
                   </td>
                   <td>
+                    <% if Rating.where(location_id: a_work_location.id).exists? %>
+                      <%= Rating.where(location_id: a_work_location.id).average(:wifi_rating).round(1) %>
+                    <% else %>
+                      N/A
+                    <% end %>
+                  </td>
+                  <td>
                     <% if a_work_location.respond_to?(:distance) && a_work_location.distance.present? %>
                       <%= a_work_location.distance.round(1) %> miles
                     <% else %>
@@ -95,7 +118,7 @@
               <% end %>
             <% else %>
               <tr>
-                <td colspan="5" class="text-center">No work locations found matching your criteria.</td>
+                <td colspan="6" class="text-center">No work locations found matching your criteria.</td>
               </tr>
             <% end %>
           </tbody>

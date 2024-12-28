@@ -9,6 +9,9 @@ gem 'geocoder'
 
 gem 'cssbundling-rails'
 
+gem 'dotenv-rails', groups: [:development, :test]
+
+
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.3", ">= 7.1.3.2"
@@ -83,7 +86,7 @@ end
 gem "appdev_support"
 gem "awesome_print"
 gem "devise"
-gem "dotenv-rails"
+#gem "dotenv-rails"
 gem "faker"
 gem "htmlbeautifier"
 gem "http"

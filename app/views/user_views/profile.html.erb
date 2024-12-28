@@ -1,57 +1,55 @@
-<h2> User: <%=current_user.email%></h2>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <h2 class="text-center mb-4">Profile</h2>
 
 <% if current_user.admin? %>
-  <h1 style="color: red;">ADMIN</h1>
+  <p class="text-center badge bg-danger fs-5">ADMIN</p>
 <% end %>
 
-<div>
-  <div>
-    <h3>
-      <a href="/users/edit">Edit profile</a>
-    </h3>
-  <div>
-  <div>
-    <h2>
-      List of all favorite places
-    </h2>
-  </div>
-</div>
+<!-- User Details -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">User: <%= current_user.email %></h5>
+                    <a href="/users/edit" class="btn btn-primary mt-3">Edit Profile</a>
+        </div>
+      </div>
 
-<hr>
-
-<hr>
-<div>
-  <div>
-    <table border="1">
-      <tr>
-        <th>Place</th>
-        <th>Note</th>
-        <th>Added On</th>
-        <th></th>
-        <th></th>
-      </tr>
-
-      <% @list_of_favorite_places.each do |a_favorite_place| %>
-      <tr>
-        <td><%= a_favorite_place.place.name %></td>
-        <td><%= a_favorite_place.note %></td>
-        <td><%= time_ago_in_words(a_favorite_place.created_at) %> ago</td>
-        <td>
-          <a href="/delete_favorite_place/<%=a_favorite_place.place_id%>">
-            Remove Favorite
-          </a>
-        </td>
-        <td>
-          <a href="/work_locations/<%=a_favorite_place.place.id %>">
-            Show details
-          </a>
-        </td>
-      </tr>
-      <% end %>
-    </table>
-  </div>
-</div>
-
-<hr>
+      <!-- Favorite Places -->
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">Favorite Places</h5>
+        </div>
+        <div class="card-body">
+          <% if @list_of_favorite_places.any? %>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Place</th>
+                  <th scope="col">Note</th>
+                  <th scope="col">Added On</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @list_of_favorite_places.each do |a_favorite_place| %>
+                  <tr>
+                    <td><%= a_favorite_place.place.name %></td>
+                    <td><%= a_favorite_place.note.presence || "No note" %></td>
+                    <td><%= time_ago_in_words(a_favorite_place.created_at) %> ago</td>
+                    <td>
+                      <a href="/delete_favorite_place/<%= a_favorite_place.place_id %>" class="btn btn-danger btn-sm">Remove</a>
+                      <a href="/work_locations/<%= a_favorite_place.place.id %>" class="btn btn-info btn-sm">Details</a>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          <% else %>
+            <p class="text-center">You have no favorite places. <a href="/work_locations">Find some to add!</a></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -21,7 +21,16 @@ class Rating < ApplicationRecord
   validates :stars, presence: true
   validates :location_id, presence: true
 
+  after_save :update_location_averages
+  after_destroy :update_location_averages
 
+  private
+
+  def update_location_averages
+    location.update(
+      crowding_average: location.ratings.average(:crowding_score)&.round || 0,
+      noise_average: location.ratings.average(:noise_level)&.round || 0
+    )
+  end
 
 end
-
