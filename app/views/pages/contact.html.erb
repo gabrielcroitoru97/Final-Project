@@ -1,0 +1,37 @@
+<div class="container mt-5">
+  <div class="text-center">
+    <h1 class="display-4 fw-bold">Contact Us</h1>
+    <p class="lead mt-3 mb-5">
+      Have questions or suggestions? We'd love to hear from you. Fill out the form below, and we'll get back to you as soon as possible.
+    </p>
+  </div>
+
+  <!-- Contact Form -->
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <form action="/submit_contact" method="post">
+        <div class="mb-3">
+          <label for="name" class="form-label fw-bold">Your Name</label>
+          <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label fw-bold">Your Email</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+        <div class="mb-3">
+          <label for="message" class="form-label fw-bold">Your Message</label>
+          <textarea class="form-control" id="message" name="message" rows="5" placeholder="Enter your message" required></textarea>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Additional Contact Information -->
+  <div class="text-center mt-5">
+    <h3 class="fw-bold">Prefer to reach out directly?</h3>
+    <p>Email us at <a href="mailto:contact@dinodesks.com" class="text-decoration-none">contact@dinodesks.com</a></p>
+  </div>
+</div>

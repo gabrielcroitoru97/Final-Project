@@ -55,6 +55,13 @@ Rails.application.routes.draw do
 
   get "/search_work_locations", to: "work_locations#search"
 
+  get '/about', to: 'pages#about'
+
+  resources :contacts, only: [:new, :create]
+  get '/contact', to: 'contacts#new'
+  post '/contact', to: 'contacts#create'
+  
+
 
   
 namespace :admin do

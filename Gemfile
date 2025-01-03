@@ -11,6 +11,7 @@ gem 'cssbundling-rails'
 
 gem 'dotenv-rails', groups: [:development, :test]
 
+gem 'letter_opener', group: :development
 
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
