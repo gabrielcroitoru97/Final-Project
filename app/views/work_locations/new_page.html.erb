@@ -54,26 +54,17 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="weekday_opening_box" class="form-label">Weekday Opening</label>
-            <input type="time" id="weekday_opening_box" name="query_weekday_opening" class="form-control">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="weekday_closing_box" class="form-label">Weekday Closing</label>
-            <input type="time" id="weekday_closing_box" name="query_weekday_closing" class="form-control">
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="weekend_opening_box" class="form-label">Weekend Opening</label>
-            <input type="time" id="weekend_opening_box" name="query_weekend_opening" class="form-control">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="weekend_closing_box" class="form-label">Weekend Closing</label>
-            <input type="time" id="weekend_closing_box" name="query_weekend_closing" class="form-control">
-          </div>
+        <!-- Opening and Closing Times for Each Day -->
+        <div class="mb-3">
+          <h5>Opening and Closing Times</h5>
+          <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
+            <div class="d-flex align-items-center mb-2">
+              <label for="<%= day.downcase %>_opening_box" class="form-label me-3" style="width: 100px;"><%= day %></label>
+              <input type="time" id="<%= day.downcase %>_opening_box" name="query_<%= day.downcase %>_opening" class="form-control me-2">
+              <span class="me-2">to</span>
+              <input type="time" id="<%= day.downcase %>_closing_box" name="query_<%= day.downcase %>_closing" class="form-control">
+            </div>
+          <% end %>
         </div>
 
         <div class="mb-3">

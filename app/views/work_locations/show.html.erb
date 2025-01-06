@@ -59,10 +59,20 @@
           </td>
         </tr>
         <tr><th>Website</th><td><%= @the_work_location.website.present? ? link_to(@the_work_location.website, @the_work_location.website, target: "_blank") : "N/A" %></td></tr>
-        <tr><th>Weekday Hours</th><td><%= (@the_work_location.weekday_opening && @the_work_location.weekday_closing) ? "#{@the_work_location.weekday_opening.strftime("%I:%M %P")} - #{@the_work_location.weekday_closing.strftime("%I:%M %P")}" : "N/A" %></td></tr>
-        <tr><th>Weekend Hours</th><td><%= (@the_work_location.weekend_opening && @the_work_location.weekend_closing) ? "#{@the_work_location.weekend_opening.strftime("%I:%M %P")} - #{@the_work_location.weekend_closing.strftime("%I:%M %P")}" : "N/A" %></td></tr>
         <tr><th>Requires Purchase</th><td><%= @the_work_location.requires_purchase ? "Yes" : "No" %></td></tr>
         <tr><th>Membership</th><td><%= @the_work_location.membership ? "Yes" : "No" %></td></tr>
+        <!-- Opening and Closing Times for Each Day -->
+        <tr><th colspan="2" class="text-center">Opening and Closing Hours</th></tr>
+        <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
+          <tr>
+            <th><%= day %></th>
+            <td>
+              <%= (@the_work_location.send("#{day.downcase}_opening") && @the_work_location.send("#{day.downcase}_closing")) ? "#{@the_work_location.send("#{day.downcase}_opening").strftime("%I:%M %P")} - #{@the_work_location.send("#{day.downcase}_closing").strftime("%I:%M %P")}" : "Closed" %>
+            </td>
+          </tr>
+        <% end %>
+
+
       </table>
 
       <!-- Ratings Summary -->
@@ -134,7 +144,7 @@
         </table>
       </div>
 
-<!-- Google Maps Embed -->
+<!-- Google Maps Embed --
       <% 
         latitude = @the_work_location.latitude
         longitude = @the_work_location.longitude
@@ -155,3 +165,4 @@
     </div>
   </div>
 </div>
+>

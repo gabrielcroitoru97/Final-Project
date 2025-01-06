@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: contact_requests
+# Table name: contacts
 #
 #  id         :bigint           not null, primary key
 #  email      :string
@@ -9,7 +9,7 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-class ContactRequest < ApplicationRecord
+class Contact < ApplicationRecord
   validates :name, presence: true
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :message, presence: true

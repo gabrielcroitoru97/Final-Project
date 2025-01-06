@@ -8,19 +8,29 @@
 #  city              :string
 #  crowding_average  :integer
 #  description       :text
+#  friday_closing    :time
+#  friday_opening    :time
 #  latitude          :float
 #  longitude         :float
 #  membership        :boolean
+#  monday_closing    :time
+#  monday_opening    :time
 #  name              :string
 #  noise_average     :integer
 #  phone_number      :string
 #  requires_purchase :boolean
+#  saturday_closing  :time
+#  saturday_opening  :time
 #  state             :string
+#  sunday_closing    :time
+#  sunday_opening    :time
+#  thursday_closing  :time
+#  thursday_opening  :time
+#  tuesday_closing   :time
+#  tuesday_opening   :time
 #  website           :string
-#  weekday_closing   :time
-#  weekday_opening   :time
-#  weekend_closing   :time
-#  weekend_opening   :time
+#  wednesday_closing :time
+#  wednesday_opening :time
 #  wifi_speed        :integer
 #  zip_code          :string
 #  created_at        :datetime         not null
@@ -47,6 +57,8 @@ class WorkLocation < ApplicationRecord
   validates :address, presence: true
   validates :phone_number, format: { with: /\A\d{10}\z/, message: "must be 10 digits" }, allow_blank: true
 
+  validate :opening_before_closing
+
   # Geocoding Setup
   geocoded_by :full_address
   after_validation :geocode, if: ->(obj) { obj.address_changed? || obj.city_changed? || obj.state_changed? || obj.zip_code_changed? }
@@ -59,4 +71,22 @@ class WorkLocation < ApplicationRecord
   def type
     LocationType.find_by(id: location_type_id)&.descriptor || "Unknown"
   end
+
+  def hours_for(day)
+    opening = send("#{day}_opening")
+    closing = send("#{day}_closing")
+    opening && closing ? "#{opening.strftime('%I:%M %P')} - #{closing.strftime('%I:%M %P')}" : "Closed"
+  end
+
+
+  def opening_before_closing
+    %w[monday tuesday wednesday thursday friday saturday sunday].each do |day|
+      opening = send("#{day}_opening")
+      closing = send("#{day}_closing")
+      if opening && closing && opening >= closing
+        errors.add(:base, "#{day.capitalize} opening time must be before closing time")
+      end
+    end
+  end
+
 end

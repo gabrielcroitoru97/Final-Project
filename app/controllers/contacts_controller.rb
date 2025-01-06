@@ -1,16 +1,16 @@
 class ContactsController < ApplicationController
   def new
-    @contact_request = ContactRequest.new
+    @contact = Contact.new
   end
 
   def create
-    @contact_request = ContactRequest.new(contact_request_params)
+    @contact = Contact.new(contact_params)
 
-    if @contact_request.save
+    if @contact.save
       # Optional: Send an email notification (if configured)
-      # ContactMailer.contact_request(@contact_request).deliver_now
+      # ContactMailer.contact_request(@contact).deliver_now
 
-      redirect_to contact_path, notice: 'Thank you for reaching out! We will get back to you shortly.'
+      redirect_to new_contact_path, notice: 'Thank you for reaching out! We will get back to you shortly.'
     else
       flash.now[:alert] = 'There was a problem with your submission. Please correct the errors and try again.'
       render :new
@@ -19,7 +19,7 @@ class ContactsController < ApplicationController
 
   private
 
-  def contact_request_params
-    params.require(:contact_request).permit(:name, :email, :subject, :message)
+  def contact_params
+    params.require(:contact).permit(:name, :email, :message)
   end
 end

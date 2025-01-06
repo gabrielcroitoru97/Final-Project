@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_03_205937) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_06_212653) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_03_205937) do
   end
 
   create_table "contact_requests", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "contacts", force: :cascade do |t|
     t.string "name"
     t.string "email"
     t.text "message"
@@ -118,10 +126,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_03_205937) do
     t.integer "location_type_id"
     t.integer "wifi_speed"
     t.string "address"
-    t.time "weekday_opening"
-    t.time "weekend_opening"
-    t.time "weekday_closing"
-    t.time "weekend_closing"
     t.string "phone_number"
     t.string "website"
     t.string "city"
@@ -139,6 +143,20 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_03_205937) do
     t.boolean "membership"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.time "monday_opening"
+    t.time "monday_closing"
+    t.time "tuesday_opening"
+    t.time "tuesday_closing"
+    t.time "wednesday_opening"
+    t.time "wednesday_closing"
+    t.time "thursday_opening"
+    t.time "thursday_closing"
+    t.time "friday_opening"
+    t.time "friday_closing"
+    t.time "saturday_opening"
+    t.time "saturday_closing"
+    t.time "sunday_opening"
+    t.time "sunday_closing"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
