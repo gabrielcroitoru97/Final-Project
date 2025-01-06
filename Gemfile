@@ -13,6 +13,11 @@ gem 'dotenv-rails', groups: [:development, :test]
 
 gem 'letter_opener', group: :development
 
+gem 'pg'
+
+gem 'rails_12factor', group: :production
+
+
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.3", ">= 7.1.3.2"
