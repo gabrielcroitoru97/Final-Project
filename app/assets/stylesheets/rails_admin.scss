@@ -1,2 +1,14 @@
 $fa-font-path: ".";
-@import "rails_admin/src/rails_admin/styles/base";
+
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
+@import "rails_admin/src/rails_admin/styles/base/variables";
+@import "rails_admin/src/rails_admin/styles/base/mixins";
+@import "rails_admin/src/rails_admin/styles/base/theming";
+
+// Import other styles
+@import "rails_admin/src/rails_admin/styles/filtering-multiselect";
+@import "rails_admin/src/rails_admin/styles/filtering-select";
+@import "rails_admin/src/rails_admin/styles/widgets";

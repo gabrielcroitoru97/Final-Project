@@ -88,3 +88,4 @@ end
 
 gem "devise"
 gem "carrierwave"
+gem "cssbundling-rails"
