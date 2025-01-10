@@ -17,7 +17,7 @@ Rails.application.configure do
   config.secret_key_base = ENV["SECRET_KEY_BASE"]
 
   # Ensure master key is required for encrypted credentials.
-  config.require_master_key = true
+  #config.require_master_key = true
 
   # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
   # config.public_file_server.enabled = false
