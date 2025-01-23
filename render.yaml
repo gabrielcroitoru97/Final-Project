@@ -1,6 +1,17 @@
 version: "1"
-
 services:
+  - type: web
+    name: my-app-name
+    env: ruby
+    plan: free
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "./bin/render-start.sh"
+    envVars:
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: DATABASE_URL
+        fromService: mysql # Ensure this references the exact name of your database service
+
   - type: pserv
     name: mysql
     runtime: docker
@@ -16,15 +27,3 @@ services:
       mountPath: /var/lib/mysql
       sizeGB: 10
     autoDeploy: false
-
-  - type: web
-    name: my-app-name
-    env: ruby
-    plan: free
-    buildCommand: "./bin/render-build.sh"
-    startCommand: "./bin/render-start.sh"
-    envVars:
-      - key: SECRET_KEY_BASE
-        generateValue: true
-      - key: DATABASE_URL
-        fromService: mysql
