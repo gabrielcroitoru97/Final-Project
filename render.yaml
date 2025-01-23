@@ -1,10 +1,30 @@
+version: "1"
+
 services:
+  - type: pserv
+    name: mysql
+    runtime: docker
+    repo: https://github.com/render-examples/mysql
+    plan: starter
+    envVars:
+      - fromGroup: mysql
+    region: oregon
+    dockerContext: .
+    dockerfilePath: ./Dockerfile
+    disk:
+      name: mysql
+      mountPath: /var/lib/mysql
+      sizeGB: 10
+    autoDeploy: false
+
   - type: web
-    name: my-app-name # the name of this service, eg hello-world
-    env: ruby # this app is written in ruby
-    plan: free # make sure to set this to free or you'll get billed $$$
-    buildCommand: "./bin/render-build.sh" # # we already created these two files for you
+    name: my-app-name
+    env: ruby
+    plan: free
+    buildCommand: "./bin/render-build.sh"
     startCommand: "./bin/render-start.sh"
-    envVars: # this section sets some ENV variables needed by Render for deployment
+    envVars:
       - key: SECRET_KEY_BASE
         generateValue: true
+      - key: DATABASE_URL
+        fromService: mysql
