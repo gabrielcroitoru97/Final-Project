@@ -1,7 +1,14 @@
-version: "1"
+databases:
+  name: mysite
+  datebaseName: mysite
+  user: mysite
+  plan: free
+
+
 services:
   - type: web
-    name: my-app-name
+    name: mysite
+    runtime: ruby
     env: ruby
     plan: free
     buildCommand: "./bin/render-build.sh"
@@ -10,20 +17,9 @@ services:
       - key: SECRET_KEY_BASE
         generateValue: true
       - key: DATABASE_URL
-        fromService: mysql # Ensure this references the exact name of your database service
-
-  - type: pserv
-    name: mysql
-    runtime: docker
-    repo: https://github.com/render-examples/mysql
-    plan: starter
-    envVars:
-      - fromGroup: mysql
-    region: oregon
-    dockerContext: .
-    dockerfilePath: ./Dockerfile
-    disk:
-      name: mysql
-      mountPath: /var/lib/mysql
-      sizeGB: 10
-    autoDeploy: false
+        fromDatabase:
+          name: mysite
+          property: connectionString
+        key: RAILS_MASTER_KEY
+        sync:false- key:WEB_CONCURRENCY
+        value: 2 #sensibledefault
