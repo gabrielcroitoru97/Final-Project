@@ -11,7 +11,9 @@ services:
     runtime: ruby
     env: ruby
     plan: free
-    buildCommand: "./bin/render-build.sh"
+    buildCommand: |
+      bundle install
+      bundle exec rake assets:precompile
     startCommand: "./bin/render-start.sh"
     envVars:
       - key: SECRET_KEY_BASE
