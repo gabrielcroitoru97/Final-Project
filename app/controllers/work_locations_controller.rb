@@ -74,7 +74,7 @@ class WorkLocationsController < ApplicationController
     the_id = params.fetch("path_id")
     the_work_location = WorkLocation.where({ :id => the_id }).at(0)
   
-    the_work_location.location_type_id = params.fetch("query_location_type")
+    the_work_location.location_type_id = params.fetch("query_location_type_id")
     the_work_location.name = params.fetch("query_name")
     the_work_location.address = params.fetch("query_address")
     the_work_location.city = params.fetch("query_city")
