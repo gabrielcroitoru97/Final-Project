@@ -45,12 +45,89 @@
       <!-- Location Details -->
       <% location_type = LocationType.find_by(id: @the_work_location.location_type_id) %>
       <table class="table table-bordered mb-4">
-        <!-- Location details as before -->
+        <tr><th>Location Type</th><td><%= location_type&.descriptor || "N/A" %></td></tr>
+        <tr><th>Name</th><td><%= @the_work_location.name.presence || "N/A" %></td></tr>
+        <tr><th>Description</th><td><%= @the_work_location.description.presence || "N/A" %></td></tr>
+        <tr><th>Address</th><td><%= @the_work_location.address.presence || "N/A" %></td></tr>
+        <tr><th>City</th><td><%= @the_work_location.city.presence || "N/A" %></td></tr>
+        <tr><th>State</th><td><%= @the_work_location.state.presence || "N/A" %></td></tr>
+        <tr><th>Zip Code</th><td><%= @the_work_location.zip_code.presence || "N/A" %></td></tr>
+        <tr>
+          <th>Phone Number</th>
+          <td>
+            <%= @the_work_location.phone_number&.gsub(/(\d{3})(\d{3})(\d{4})/, '(\1)\2-\3') || "N/A" %>
+          </td>
+        </tr>
+        <tr><th>Website</th><td><%= @the_work_location.website.present? ? link_to(@the_work_location.website, @the_work_location.website, target: "_blank") : "N/A" %></td></tr>
+        <tr><th>Requires Purchase</th><td><%= @the_work_location.requires_purchase ? "Yes" : "No" %></td></tr>
+        <tr><th>Membership</th><td><%= @the_work_location.membership ? "Yes" : "No" %></td></tr>
+        <!-- Opening and Closing Times for Each Day -->
+        <tr><th colspan="2" class="text-center">Opening and Closing Hours</th></tr>
+        <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
+          <tr>
+            <th><%= day %></th>
+            <td>
+              <%= (@the_work_location.send("#{day.downcase}_opening") && @the_work_location.send("#{day.downcase}_closing")) ? "#{@the_work_location.send("#{day.downcase}_opening").strftime("%I:%M %P")} - #{@the_work_location.send("#{day.downcase}_closing").strftime("%I:%M %P")}" : "Closed" %>
+            </td>
+          </tr>
+        <% end %>
       </table>
 
+      <!-- Review Section -->
+      <% if current_user && current_user.id != @the_work_location.owner_id && !@ratings.exists?(user_id: current_user.id) %>
+        <div class="mb-4 p-4 border rounded bg-light">
+          <h4 class="mb-3">Add Your Review</h4>
+          <form action="/insert_rating/<%= @the_work_location.id %>" method="post">
+            <div class="mb-3">
+              <label for="stars_input" class="form-label">Overall Rating</label>
+              <input type="number" id="stars_input" name="query_stars" class="form-control" min="1" max="5" required>
+            </div>
+            <div class="mb-3">
+              <label for="wifi_input" class="form-label">Wifi Rating</label>
+              <input type="number" id="wifi_input" name="query_wifi_rating" class="form-control" min="1" max="5" required>
+            </div>
+            <div class="mb-3">
+              <label for="crowding_input" class="form-label">Crowding Score</label>
+              <input type="number" id="crowding_input" name="query_crowding_score" class="form-control" min="1" max="5" required>
+            </div>
+            <div class="mb-3">
+              <label for="noise_input" class="form-label">Noise Level</label>
+              <input type="number" id="noise_input" name="query_noise_level" class="form-control" min="1" max="5" required>
+            </div>
+            <div class="mb-3">
+              <label for="content_input" class="form-label">Comment</label>
+              <textarea id="content_input" name="query_content" rows="3" class="form-control" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Submit Review</button>
+          </form>
+        </div>
+      <% end %>
+
       <!-- Ratings Summary -->
+      <% avg_ratings = {
+           stars: Rating.where(location_id: @the_work_location.id).average(:stars),
+           wifi: Rating.where(location_id: @the_work_location.id).average(:wifi_rating),
+           crowding: Rating.where(location_id: @the_work_location.id).average(:crowding_score),
+           noise: Rating.where(location_id: @the_work_location.id).average(:noise_level)
+      }.transform_values { |v| v&.round(1) || 0 } %>
+
       <div class="ratings-summary d-flex justify-content-around text-center mb-4">
-        <!-- Ratings summary as before -->
+        <div class="rating-item">
+          <h5>Overall Rating</h5>
+          <p class="display-6 text-primary"><%= avg_ratings[:stars] %> / 5</p>
+        </div>
+        <div class="rating-item">
+          <h5>Wifi</h5>
+          <p class="display-6 text-primary"><%= avg_ratings[:wifi] %> / 5</p>
+        </div>
+        <div class="rating-item">
+          <h5>Crowding</h5>
+          <p class="display-6 text-primary"><%= avg_ratings[:crowding] %> / 5</p>
+        </div>
+        <div class="rating-item">
+          <h5>Noise</h5>
+          <p class="display-6 text-primary"><%= avg_ratings[:noise] %> / 5</p>
+        </div>
       </div>
 
       <% if current_user && @the_work_location.owner_id == current_user.id %>
@@ -63,51 +140,37 @@
       <!-- User Ratings Table -->
       <div class="table-responsive mb-4 text-center">
         <table class="table d-inline-block">
-          <!-- Ratings table as before -->
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Overall</th>
+              <th>Wifi</th>
+              <th>Crowding</th>
+              <th>Noise</th>
+              <th>Comment</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @ratings.each do |a_rating| %>
+              <tr>
+                <td><%= a_rating.user.email %></td>
+                <% [:stars, :wifi_rating, :crowding_score, :noise_level].each do |field| %>
+                  <td style="min-width: 100px;">
+                    <%= a_rating.send(field) %> / 5
+                  </td>
+                <% end %>
+                <td><%= a_rating.content %></td>
+                <td>
+                  <% if current_user && a_rating.user_id == current_user.id %>
+                    <a href="/delete_rating/<%= a_rating.id %>" class="btn btn-sm btn-danger">Delete</a>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
         </table>
       </div>
-
-      <!-- New Review Form -->
-      <% if current_user %>
-        <div class="card mb-4">
-          <div class="card-header">
-            <h5>Add a Review</h5>
-          </div>
-          <div class="card-body">
-            <form action="/insert_rating/<%= @the_work_location.id %>" method="post">
-              <div class="mb-3">
-                <label for="rating_stars" class="form-label">Overall Rating (1-5)</label>
-                <input type="number" id="rating_stars" name="query_stars" class="form-control" min="1" max="5" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="wifi_rating" class="form-label">Wifi Rating (1-5)</label>
-                <input type="number" id="wifi_rating" name="query_wifi_rating" class="form-control" min="1" max="5" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="crowding_score" class="form-label">Crowding Score (1-5)</label>
-                <input type="number" id="crowding_score" name="query_crowding_score" class="form-control" min="1" max="5" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="noise_level" class="form-label">Noise Level (1-5)</label>
-                <input type="number" id="noise_level" name="query_noise_level" class="form-control" min="1" max="5" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="content_box" class="form-label">Comment</label>
-                <textarea id="content_box" name="query_content" rows="3" class="form-control"></textarea>
-              </div>
-
-              <button type="submit" class="btn btn-success">Submit Review</button>
-            </form>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</div>
 
 <!-- Google Maps Embed --
       <% 
