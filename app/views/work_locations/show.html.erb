@@ -75,28 +75,30 @@
 
       <!-- Review Section -->
       <% if current_user && current_user.id != @the_work_location.owner_id && !@ratings.exists?(user_id: current_user.id) %>
-        <div class="mb-4 p-4 border rounded bg-light">
-          <h4 class="mb-3">Add Your Review</h4>
+        <div class="mb-4 p-3 border rounded bg-light">
+          <h5 class="mb-3">Add Your Review</h5>
           <form action="/insert_rating/<%= @the_work_location.id %>" method="post">
-            <div class="mb-3">
-              <label for="stars_input" class="form-label">Overall Rating</label>
-              <input type="number" id="stars_input" name="query_stars" class="form-control" min="1" max="5" required>
-            </div>
-            <div class="mb-3">
-              <label for="wifi_input" class="form-label">Wifi Rating</label>
-              <input type="number" id="wifi_input" name="query_wifi_rating" class="form-control" min="1" max="5" required>
-            </div>
-            <div class="mb-3">
-              <label for="crowding_input" class="form-label">Crowding Score</label>
-              <input type="number" id="crowding_input" name="query_crowding_score" class="form-control" min="1" max="5" required>
-            </div>
-            <div class="mb-3">
-              <label for="noise_input" class="form-label">Noise Level</label>
-              <input type="number" id="noise_input" name="query_noise_level" class="form-control" min="1" max="5" required>
+            <div class="d-flex justify-content-between mb-2">
+              <div class="me-2">
+                <label for="stars_input" class="form-label">Overall</label>
+                <input type="number" id="stars_input" name="query_stars" class="form-control" min="1" max="5" required>
+              </div>
+              <div class="me-2">
+                <label for="wifi_input" class="form-label">Wifi</label>
+                <input type="number" id="wifi_input" name="query_wifi_rating" class="form-control" min="1" max="5" required>
+              </div>
+              <div class="me-2">
+                <label for="crowding_input" class="form-label">Crowding</label>
+                <input type="number" id="crowding_input" name="query_crowding_score" class="form-control" min="1" max="5" required>
+              </div>
+              <div>
+                <label for="noise_input" class="form-label">Noise</label>
+                <input type="number" id="noise_input" name="query_noise_level" class="form-control" min="1" max="5" required>
+              </div>
             </div>
             <div class="mb-3">
               <label for="content_input" class="form-label">Comment</label>
-              <textarea id="content_input" name="query_content" rows="3" class="form-control" required></textarea>
+              <textarea id="content_input" name="query_content" rows="2" class="form-control" required></textarea>
             </div>
             <button type="submit" class="btn btn-success">Submit Review</button>
           </form>
@@ -113,7 +115,7 @@
 
       <div class="ratings-summary d-flex justify-content-around text-center mb-4">
         <div class="rating-item">
-          <h5>Overall Rating</h5>
+          <h5>Overall</h5>
           <p class="display-6 text-primary"><%= avg_ratings[:stars] %> / 5</p>
         </div>
         <div class="rating-item">
