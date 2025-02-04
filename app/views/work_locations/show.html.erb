@@ -77,7 +77,7 @@
       <% if current_user && current_user.id != @the_work_location.owner_id && !@ratings.exists?(user_id: current_user.id) %>
         <div class="mb-4 p-3 border rounded bg-light">
           <h5 class="mb-3">Add Your Review</h5>
-          <form action="/insert_rating/<%= @the_work_location.id %>" method="post">
+          <form action="/add_rating/<%= @the_work_location.id %>" method="post">
             <div class="d-flex justify-content-between mb-2">
               <div class="me-2">
                 <label for="stars_input" class="form-label">Overall</label>
