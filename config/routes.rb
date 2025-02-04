@@ -32,8 +32,8 @@ Rails.application.routes.draw do
   #------------------------------
   # Routes for the Rating resource:
   # CREATE
-  post("/insert_rating", { :controller => "ratings", :action => "create" })
-  get("/add_rating/:path_id", { :controller => "ratings", :action => "add" })
+  post("/insert_rating/:path_id", { :controller => "ratings", :action => "create" })
+  get("/add_rating", { :controller => "ratings", :action => "add" })
 
   # DELETE
   get("/delete_rating/:path_id", { :controller => "ratings", :action => "destroy" })
