@@ -4,10 +4,20 @@ class CreateWorkLocations < ActiveRecord::Migration[7.1]
       t.integer :location_type_id
       t.integer :wifi_speed
       t.string :address
-      t.time :weekday_opening
-      t.time :weekend_opening
-      t.time :weekday_closing
-      t.time :weekend_closing
+      t.time :monday_opening
+      t.time :tuesday_opening
+      t.time :wednesday_opening
+      t.time :thursday_opening
+      t.time :friday_opening
+      t.time :saturday_opening
+      t.time :sunday_opening
+      t.time :monday_closing
+      t.time :tuesday_closing
+      t.time :wednesday_closing
+      t.time :thursday_closing
+      t.time :friday_closing
+      t.time :saturday_closing
+      t.time :sunday_closing
       t.string :phone_number
       t.string :website
       t.string :city
