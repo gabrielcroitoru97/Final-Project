@@ -1,6 +1,6 @@
 require 'faker'
 
-=begin
+
 # Cities and states
 cities = [
   { city: "New York", state: "NY", zip_codes: %w[10001 10002 10003 10004 10005] },
@@ -87,7 +87,7 @@ User.all.each do |user|
     )
   end
 end
-=end
+
 
 WorkLocation.all.each do |location|
   # Generate between 1 to 5 images per location
