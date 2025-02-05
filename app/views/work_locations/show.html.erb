@@ -67,7 +67,17 @@
           <tr>
             <th><%= day %></th>
             <td>
-              <%= (@the_work_location.send("#{day.downcase}_opening") && @the_work_location.send("#{day.downcase}_closing")) ? "#{@the_work_location.send("#{day.downcase}_opening").strftime("%I:%M %P")} - #{@the_work_location.send("#{day.downcase}_closing").strftime("%I:%M %P")}" : "Closed" %>
+              <% opening = @the_work_location.send("#{day.downcase}_opening") %>
+              <% closing = @the_work_location.send("#{day.downcase}_closing") %>
+              <% closed = @the_work_location.send("#{day.downcase}_closed") %>
+
+              <% if closed %>
+                Closed
+              <% elsif opening.nil? && closing.nil? %>
+                <!-- Blank when both are empty -->
+              <% else %>
+                <%= opening.strftime("%I:%M %P") if opening %> - <%= closing.strftime("%I:%M %P") if closing %>
+              <% end %>
             </td>
           </tr>
         <% end %>

@@ -59,11 +59,14 @@
           <% ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"].each do |day| %>
             <div class="d-flex align-items-center mb-2">
               <label for="<%= day %>_opening_box" class="form-label me-3" style="width: 100px;"><%= day.capitalize %></label>
-              <input type="time" id="<%= day %>_opening_box" name="query_<%= day %>_opening" class="form-control me-2"
-                     value="<%= @the_work_location.send("#{day}_opening") %>">
+              <input type="time" id="<%= day %>_opening_box" name="query_<%= day %>_opening" class="form-control form-control-sm me-2 time-box" style="width: 100px;" value="<%= @the_work_location.send("\#{day}_opening") %>">
               <span class="me-2">to</span>
-              <input type="time" id="<%= day %>_closing_box" name="query_<%= day %>_closing" class="form-control"
-                     value="<%= @the_work_location.send("#{day}_closing") %>">
+              <input type="time" id="<%= day %>_closing_box" name="query_<%= day %>_closing" class="form-control form-control-sm me-2 time-box" style="width: 100px;" value="<%= @the_work_location.send("\#{day}_closing") %>">
+
+              <div class="ms-2 d-flex align-items-center">
+                <input type="checkbox" id="<%= day %>_closed_box" name="query_<%= day %>_closed" value="1" class="form-check-input closed-checkbox" <%= @the_work_location.send("\#{day}_closed") ? 'checked' : '' %>>
+                <label for="<%= day %>_closed_box" class="ms-2 form-label mb-0">Closed</label>
+              </div>
             </div>
           <% end %>
         </div>
@@ -82,15 +85,13 @@
 
         <!-- Requires Purchase -->
         <div class="form-check mb-3">
-          <input type="checkbox" id="requires_purchase_box" name="query_requires_purchase" value="1" class="form-check-input"
-                 <%= "checked" if @the_work_location.requires_purchase %>>
+          <input type="checkbox" id="requires_purchase_box" name="query_requires_purchase" value="1" class="form-check-input" <%= "checked" if @the_work_location.requires_purchase %>>
           <label for="requires_purchase_box" class="form-check-label">Requires Purchase</label>
         </div>
 
         <!-- Membership -->
         <div class="form-check mb-4">
-          <input type="checkbox" id="membership_box" name="query_membership" value="1" class="form-check-input"
-                 <%= "checked" if @the_work_location.membership %>>
+          <input type="checkbox" id="membership_box" name="query_membership" value="1" class="form-check-input" <%= "checked" if @the_work_location.membership %>>
           <label for="membership_box" class="form-check-label">Membership</label>
         </div>
 
@@ -100,3 +101,36 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const timeRows = document.querySelectorAll(".d-flex.align-items-center");
+
+    timeRows.forEach(row => {
+      const openingBox = row.querySelector("input[name*='opening']");
+      const closingBox = row.querySelector("input[name*='closing']");
+      const closedCheckbox = row.querySelector(".closed-checkbox");
+
+      function toggleTimeInputs() {
+        const isChecked = closedCheckbox.checked;
+        openingBox.disabled = isChecked;
+        closingBox.disabled = isChecked;
+
+        if (isChecked) {
+          openingBox.style.backgroundColor = '#e9ecef';
+          openingBox.style.color = '#6c757d';
+          closingBox.style.backgroundColor = '#e9ecef';
+          closingBox.style.color = '#6c757d';
+        } else {
+          openingBox.style.backgroundColor = '';
+          openingBox.style.color = '';
+          closingBox.style.backgroundColor = '';
+          closingBox.style.color = '';
+        }
+      }
+
+      toggleTimeInputs();
+      closedCheckbox.addEventListener("change", toggleTimeInputs);
+    });
+  });
+</script>

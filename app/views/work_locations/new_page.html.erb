@@ -61,13 +61,15 @@
             <div class="d-flex align-items-center mb-2">
               <label for="<%= day.downcase %>_opening_box" class="form-label me-3" style="width: 100px;"><%= day %></label>
               <input type="time" id="<%= day.downcase %>_opening_box" name="query_<%= day.downcase %>_opening"
-                     class="form-control form-control-sm me-2 time-box" style="width: 120px;">
+                    class="form-control form-control-sm me-2 time-box" style="width: 100px;">
               <span class="me-2">to</span>
               <input type="time" id="<%= day.downcase %>_closing_box" name="query_<%= day.downcase %>_closing"
-                     class="form-control form-control-sm me-2 time-box" style="width: 120px;">
-              <input type="checkbox" id="<%= day.downcase %>_closed_box" name="query_<%= day.downcase %>_closed" value="1"
-                     class="form-check-input ms-auto closed-checkbox">
-              <label for="<%= day.downcase %>_closed_box" class="ms-2 form-label">Closed</label>
+                    class="form-control form-control-sm me-2 time-box" style="width: 100px;">
+              <div class="ms-2 d-flex align-items-center">
+                <input type="checkbox" id="<%= day.downcase %>_closed_box" name="query_<%= day.downcase %>_closed" value="1"
+                      class="form-check-input closed-checkbox">
+                <label for="<%= day.downcase %>_closed_box" class="ms-2 form-label mb-0">Closed</label>
+              </div>
             </div>
           <% end %>
         </div>
@@ -79,7 +81,7 @@
             id="phone_number"
             name="query_phone_number"
             class="form-control"
-            placeholder="(xxx)xxx-xxxx"
+            placeholder="(xxx) xxx-xxxx"
             maxlength="14"
           >
           <div id="phone_number_error" class="text-danger mt-2" style="display: none;">
@@ -150,6 +152,25 @@
       closedCheckbox.addEventListener("change", toggleTimeInputs);
     });
 
+    // Phone number formatting
+    const phoneNumberInput = document.getElementById("phone_number");
+
+    phoneNumberInput.addEventListener("input", function () {
+      let input = phoneNumberInput.value.replace(/\D/g, ''); // Remove non-digits
+      if (input.length > 10) input = input.slice(0, 10); // Limit to 10 digits
+
+      // Format input as (xxx) xxx-xxxx
+      const formattedNumber = input.length > 6
+        ? `(${input.slice(0, 3)}) ${input.slice(3, 6)}-${input.slice(6)}`
+        : input.length > 3
+          ? `(${input.slice(0, 3)}) ${input.slice(3)}`
+          : input.length > 0
+            ? `(${input}`
+            : '';
+
+      phoneNumberInput.value = formattedNumber;
+    });
+
     // Form validation script
     const form = document.querySelector("form");
     const requiredFields = [
@@ -176,11 +197,10 @@
         }
       });
 
-      const phoneNumberInput = document.getElementById("phone_number");
       const phoneNumberError = document.getElementById("phone_number_error");
-      const phoneNumber = phoneNumberInput.value.replace(/[^0-9]/g, "");
+      const phoneNumber = phoneNumberInput.value.replace(/\D/g, "");
 
-      if (phoneNumber && phoneNumber.length !== 10) {
+      if (phoneNumber.length !== 10) {
         event.preventDefault();
         phoneNumberError.style.display = "block";
         isValid = false;
@@ -199,4 +219,3 @@
     cursor: not-allowed;
   }
 </style>
-
