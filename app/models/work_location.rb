@@ -8,27 +8,34 @@
 #  city              :string
 #  crowding_average  :integer
 #  description       :text
+#  friday_closed     :boolean          default(FALSE)
 #  friday_closing    :time
 #  friday_opening    :time
 #  latitude          :float
 #  longitude         :float
 #  membership        :boolean
+#  monday_closed     :boolean          default(FALSE)
 #  monday_closing    :time
 #  monday_opening    :time
 #  name              :string
 #  noise_average     :integer
 #  phone_number      :string
 #  requires_purchase :boolean
+#  saturday_closed   :boolean          default(FALSE)
 #  saturday_closing  :time
 #  saturday_opening  :time
 #  state             :string
+#  sunday_closed     :boolean          default(FALSE)
 #  sunday_closing    :time
 #  sunday_opening    :time
+#  thursday_closed   :boolean          default(FALSE)
 #  thursday_closing  :time
 #  thursday_opening  :time
+#  tuesday_closed    :boolean          default(FALSE)
 #  tuesday_closing   :time
 #  tuesday_opening   :time
 #  website           :string
+#  wednesday_closed  :boolean          default(FALSE)
 #  wednesday_closing :time
 #  wednesday_opening :time
 #  wifi_speed        :integer

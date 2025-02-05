@@ -60,9 +60,14 @@
           <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
             <div class="d-flex align-items-center mb-2">
               <label for="<%= day.downcase %>_opening_box" class="form-label me-3" style="width: 100px;"><%= day %></label>
-              <input type="time" id="<%= day.downcase %>_opening_box" name="query_<%= day.downcase %>_opening" class="form-control me-2">
+              <input type="time" id="<%= day.downcase %>_opening_box" name="query_<%= day.downcase %>_opening"
+                     class="form-control form-control-sm me-2 time-box" style="width: 120px;">
               <span class="me-2">to</span>
-              <input type="time" id="<%= day.downcase %>_closing_box" name="query_<%= day.downcase %>_closing" class="form-control">
+              <input type="time" id="<%= day.downcase %>_closing_box" name="query_<%= day.downcase %>_closing"
+                     class="form-control form-control-sm me-2 time-box" style="width: 120px;">
+              <input type="checkbox" id="<%= day.downcase %>_closed_box" name="query_<%= day.downcase %>_closed" value="1"
+                     class="form-check-input ms-auto closed-checkbox">
+              <label for="<%= day.downcase %>_closed_box" class="ms-2 form-label">Closed</label>
             </div>
           <% end %>
         </div>
@@ -110,6 +115,42 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
+    // Handle disabling/enabling time inputs based on the 'Closed' checkbox
+    const timeRows = document.querySelectorAll(".d-flex.align-items-center");
+
+    timeRows.forEach(row => {
+      const openingBox = row.querySelector("input[name*='opening']");
+      const closingBox = row.querySelector("input[name*='closing']");
+      const closedCheckbox = row.querySelector(".closed-checkbox");
+
+      // Toggle function
+      function toggleTimeInputs() {
+        const isChecked = closedCheckbox.checked;
+        openingBox.disabled = isChecked;
+        closingBox.disabled = isChecked;
+
+        // Force inline style
+        if (isChecked) {
+          openingBox.style.backgroundColor = '#e9ecef';
+          openingBox.style.color = '#6c757d';
+          closingBox.style.backgroundColor = '#e9ecef';
+          closingBox.style.color = '#6c757d';
+        } else {
+          openingBox.style.backgroundColor = '';
+          openingBox.style.color = '';
+          closingBox.style.backgroundColor = '';
+          closingBox.style.color = '';
+        }
+      }
+
+      // Initialize state
+      toggleTimeInputs();
+
+      // Add event listener
+      closedCheckbox.addEventListener("change", toggleTimeInputs);
+    });
+
+    // Form validation script
     const form = document.querySelector("form");
     const requiredFields = [
       { id: "name_box", errorId: "name_error" },
@@ -151,3 +192,11 @@
     });
   });
 </script>
+
+<style>
+  /* Extra styling for disabled time inputs; you can tweak if needed */
+  input[type='time'][disabled] {
+    cursor: not-allowed;
+  }
+</style>
+
